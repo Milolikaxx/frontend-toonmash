@@ -1,0 +1,28 @@
+:root {
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+}
+.potta-one-regular {
+  font-family: "Potta One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.prompt-regular {
+  font-family: "Prompt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+a:hover {
+  text-decoration: underline;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
