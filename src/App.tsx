@@ -7,14 +7,17 @@ import RootPage from "./pages/Root";
 import ErrorPage from "./pages/Error";
 import ProfilePage from "./pages/profile";
 import HomeAdmin from "./pages/Admin/homeAdmin";
+
+import EditPage from "./pages/editProfile";
 const routers = createBrowserRouter([
   {
     path: "",
-    element: <RootPage/>,
+    element: <RootPage />,
     children: [
-      { path: "", element: <HomePage/> },
-      { path: "/profile", element: <ProfilePage /> },
+      { path: "", element: <HomePage /> },
+      { path: "/profile/:id", element: <ProfilePage /> },
       { path: "/homeadmin", element: <HomeAdmin /> },
+      { path: "/editProfile", element: <EditPage /> },
     ],
     errorElement: <ErrorPage />,
   },

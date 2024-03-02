@@ -1,11 +1,13 @@
 import { Button, TextField } from "@mui/material";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserService } from "../services/userService";
 
 function LoginPage() {
   const navigate = useNavigate();
-  // const [searchParams] = useSearchParams();
-  // const fav = searchParams.get("fav");
-
+  const inputUsername = useRef<HTMLInputElement>();
+  const inputPass = useRef<HTMLInputElement>();
+  const userService = new UserService();
   function navigateToSignUp() {
     navigate("/signup");
   }
@@ -28,8 +30,7 @@ function LoginPage() {
             </label>
             <TextField
               size="small"
-              // inputRef={input}
-
+              inputRef={inputUsername}
               InputProps={{
                 sx: {
                   width: "80%",
@@ -46,8 +47,7 @@ function LoginPage() {
             <TextField
               size="small"
               type="password"
-              // inputRef={input}
-
+              inputRef={inputPass}
               InputProps={{
                 sx: {
                   width: "80%",
@@ -67,6 +67,16 @@ function LoginPage() {
                   mt: 3,
                   width: "100px",
                   alignItems: "center",
+                }}
+                onClick={() => {
+                  if ((inputUsername.current, inputPass.current)) {
+                    btnLogin(
+                      inputUsername.current?.value != undefined
+                        ? inputUsername.current?.value
+                        : "",
+                      inputPass.current.value
+                    );
+                  }
                 }}
               >
                 Sign in
@@ -91,6 +101,19 @@ function LoginPage() {
       </div>
     </>
   );
+  async function btnLogin(username: string, password: string) {
+    const res = await userService.login(username, password);
+    console.log(res);
+    if (res.type == 0) {
+      localStorage.setItem("user", JSON.stringify(res));
+      navigate("/");
+    } else if (res.type == 1) {
+      localStorage.setItem("admin", JSON.stringify(res));
+      navigate("/homeAdmin");
+    } else {
+      console.log("Invalid username or password");
+    }
+  }
 }
 
 export default LoginPage;

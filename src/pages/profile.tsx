@@ -27,7 +27,7 @@ function ProfilePage() {
           <div className="flex flex-row justify-between border-2 border-red-700">
             <div className="flex flex-row justify-center items-center">
               <img
-                className="w-56 h-56  inline-block  rounded-full "
+                className="w-56 h-56  rounded-full object-cover"
                 src="https://i.pinimg.com/564x/d1/78/9d/d1789da9a233f4e80d054abd3999f086.jpg"
                 alt=""
               />
@@ -43,10 +43,10 @@ function ProfilePage() {
             </div>
           </div>
           <hr className="h-px my-3 bg-gray-400"></hr>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-4">
-            <div className="flex flex-col aspect-square overflow-hidden">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-4">
+            <div className="flex flex-col aspect-square">
               <img
-                className="h-[280px] rounded-2xl object-cover transition-all duration-300 "
+                className="w-[300px] h-[250px] object-cover rounded-2xl "
                 src="https://i.pinimg.com/564x/a2/bd/0c/a2bd0c51798e428f8f506a7d12775bc3.jpg"
                 alt=""
               />
@@ -67,9 +67,9 @@ function ProfilePage() {
                 </Menu>
               </div>
             </div>
-            <div className="flex flex-col aspect-square overflow-hidden">
+            <div className="flex flex-col aspect-square">
               <img
-                className="h-[280px] rounded-2xl object-cover transition-all duration-300 "
+                className="w-[300px] h-[250px] rounded-2xl object-cover "
                 src="https://i.pinimg.com/564x/23/56/ad/2356ad72766799cde4cbfb3208012259.jpg"
                 alt=""
               />
@@ -91,9 +91,9 @@ function ProfilePage() {
               </div>
             </div>
 
-            <div className="flex flex-col aspect-square overflow-hidden">
+            <div className="flex flex-col aspect-square">
               <img
-                className="h-[280px] rounded-2xl object-cover transition-all duration-300 "
+                className="w-[300px] h-[250px] rounded-2xl object-cover  "
                 src="https://i.pinimg.com/564x/c3/c2/0b/c3c20b91a78dc473952265058c10be24.jpg"
                 alt=""
               />
@@ -115,7 +115,7 @@ function ProfilePage() {
               </div>
             </div>
 
-            <div className="h-[280px]  rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
+            <div className="h-[250px] rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
               <img className="h-fit" src="src\assets\addmedia.png" alt="" />
             </div>
           </div>
