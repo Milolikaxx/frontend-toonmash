@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
@@ -26,17 +26,38 @@ function LoginPage() {
             <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
               Username
             </label>
-            <input
-              type="text"
-              className=" w-80 h-10 bg-violet-500 bg-opacity-10 rounded justify-center ml-10 text-black"
-            ></input>
+            <TextField
+              size="small"
+              // inputRef={input}
+
+              InputProps={{
+                sx: {
+                  width: "80%",
+                  bgcolor: "#BA9CFF ",
+                  opacity: 0.2,
+                  color: "black",
+                  ml: 5,
+                },
+              }}
+            />
             <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
               Password
             </label>
-            <input
+            <TextField
+              size="small"
               type="password"
-              className=" w-80 h-10 bg-violet-500 bg-opacity-10 rounded justify-center ml-10 text-black"
-            ></input>
+              // inputRef={input}
+
+              InputProps={{
+                sx: {
+                  width: "80%",
+                  bgcolor: "#BA9CFF ",
+                  opacity: 0.2,
+
+                  ml: 5,
+                },
+              }}
+            />
             <div className="flex flex-row justify-center">
               <Button
                 variant="contained"
@@ -56,7 +77,7 @@ function LoginPage() {
                 I don’t have an account ?
               </label>
               <a
-                className="text-violet-500  text-sm font-thin  prompt-regular ml-2 mt-5"
+                className="text-violet-500  text-sm font-thin  prompt-regular ml-2 mt-5 cursor-pointer"
                 onClick={() => {
                   console.log("sign up");
                   navigateToSignUp();

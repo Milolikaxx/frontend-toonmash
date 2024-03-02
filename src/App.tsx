@@ -16,6 +16,8 @@ const routers = createBrowserRouter([
   },
   { path: "/login", element: <LoginPage /> },
   { path: "/signup", element: <SignUpPage /> },
+  // { path: "/profile", element: <ProfilePage /> },
+  // { path: "/homeadmin", element: <HomeAdmin /> },
 ]);
 function App() {
   return (
