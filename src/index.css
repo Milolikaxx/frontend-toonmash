@@ -11,15 +11,18 @@
 }
 .potta-one-regular {
   font-family: "Potta One", system-ui;
-  font-weight: 400;
-  font-style: normal;
 }
 
 .prompt-regular {
   font-family: "Prompt", sans-serif;
-  font-weight: 400;
-  font-style: normal;
 }
+
+.fxcenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 a:hover {
   text-decoration: underline;
 }
