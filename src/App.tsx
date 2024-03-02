@@ -2,9 +2,11 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import LoginPage from "./pages/login";
 import SignUpPage from "./pages/signup";
+import ProfilePage from "./pages/profile";
+import HomeAdmin from "./pages/Admin/homeAdmin";
 const routers = createBrowserRouter([
   {
-    // path: "/toonmash",
+    // path: "/toonmash/",
     // element: </>,
     // children: [
     //   { path: "/", element: </> },
@@ -14,6 +16,8 @@ const routers = createBrowserRouter([
   },
   { path: "/login", element: <LoginPage /> },
   { path: "/signup", element: <SignUpPage /> },
+  { path: "/profile", element: <ProfilePage /> },
+  { path: "/homeadmin", element: <HomeAdmin /> },
 ]);
 function App() {
   return (

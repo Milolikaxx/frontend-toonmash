@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 function SignUpPage() {
   return (
@@ -14,7 +14,7 @@ function SignUpPage() {
           <label className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5 mb-10">
             TOONMASH
           </label>
-          <div className=" w-3/6 h-auto bg-white rounded-xl shadow-2xl justify-start  flex flex-col">
+          <div className=" w-3/6 h-auto bg-white rounded-xl shadow-2xl =  flex flex-col">
             <label className="text-black font-bold text-3xl prompt-regular ml-10 mt-5 text-center">
               Sign Up
             </label>
@@ -22,31 +22,73 @@ function SignUpPage() {
             <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
               Username
             </label>
-            <input
-              type="text"
-              className=" w-96 h-10 bg-violet-500 bg-opacity-10 rounded justify-center ml-10 text-black"
-            ></input>
+            <TextField
+              size="small"
+              // inputRef={input}
+
+              InputProps={{
+                sx: {
+                  width: "83%",
+                  bgcolor: "#BA9CFF ",
+                  opacity: 0.2,
+                  color: "black",
+                  display: "flex",
+                  justifyContent: "center",
+                  ml: 5,
+                },
+              }}
+            />
             <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
               Name
             </label>
-            <input
-              type="text"
-              className=" w-96 h-10 bg-violet-500 bg-opacity-10 rounded justify-center ml-10 text-black"
-            ></input>
+            <TextField
+              size="small"
+              // inputRef={input}
+
+              InputProps={{
+                sx: {
+                  width: "83%",
+                  bgcolor: "#BA9CFF ",
+                  opacity: 0.2,
+                  color: "black",
+                  ml: 5,
+                },
+              }}
+            />
             <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
               Password
             </label>
-            <input
+            <TextField
+              size="small"
+              // inputRef={input}
               type="password"
-              className=" w-96 h-10 bg-violet-500 bg-opacity-10 rounded justify-center ml-10 text-black"
-            ></input>
+              InputProps={{
+                sx: {
+                  width: "83%",
+                  bgcolor: "#BA9CFF ",
+                  opacity: 0.2,
+                  color: "black",
+                  ml: 5,
+                },
+              }}
+            />
             <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
               Comfirm Password
             </label>
-            <input
+            <TextField
+              size="small"
+              // inputRef={input}
               type="password"
-              className=" w-96 h-10 bg-violet-500 bg-opacity-10 rounded justify-center ml-10 text-black"
-            ></input>
+              InputProps={{
+                sx: {
+                  width: "83%",
+                  bgcolor: "#BA9CFF ",
+                  opacity: 0.2,
+                  color: "black",
+                  ml: 5,
+                },
+              }}
+            />
             <div className="flex flex-row justify-center">
               <Button
                 variant="contained"
