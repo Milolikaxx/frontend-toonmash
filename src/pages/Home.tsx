@@ -1,9 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PictureGetResponse } from "../model/pic_get_res";
+import { UserService } from "../services/userService";
 function HomePage() {
+  const userService = new UserService();
+  const [p1, setP1] = useState<PictureGetResponse>();
+  const [p2, setP2] = useState<PictureGetResponse>();
   const [p1score, setP1score] = useState<number | undefined>(undefined);
   const [p2score, setP2score] = useState<number | undefined>(undefined);
+
+  useEffect(()=>{
+    const loadData = async () => {
+      let res = await userService.getPicByID(1)
+      setP1(res)
+      res = await userService.getPicByID(2)
+      setP2(res)
+    }
+    loadData()
+  },[])
+
+
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
+    <div className="h-full w-screen flex justify-center items-center">
       <div className="w-3/5 h-full flex flex-col items-center justify-start">
         <h1 className="mt-10 mb-10 text-4xl text-black font-bold prompt-regular">
           Who’s cooler? Click to choose.
@@ -11,20 +28,30 @@ function HomePage() {
         <div className="w-full h-3/5 flex justify-between">
           <div className="w-2/5 h-full fxcenter flex-col space-y-1">
             <img
-              className="w-full h-full object-cover rounded-md cursor-pointer hover:ring-4 hover:ring-violet-600"
-              src="https://i.pinimg.com/564x/e5/c5/35/e5c5359bdc716ff48b8b372d1b81f06f.jpg"
-              onClick={() => calScore(1000,1000,1)}
+              className="w-full h-96 object-cover rounded-md cursor-pointer hover:ring-4 hover:ring-violet-600"
+              src={p1?.img}
+              onClick={() => {
+                  if (p1?.totalScore&&p2?.totalScore) {
+                    calScore(p1,p2,1)
+                  }
+                }
+              } 
             />
-            <h4 className="text-xl text-black prompt-regular">test1</h4>
+            <h4 className="text-xl text-black prompt-regular">{p1?.name}</h4>
             {p1score ? <h4 className="text-xl text-red-500 prompt-regular">{p1score}</h4> : <></>}
           </div>
           <div className="w-2/5 h-full fxcenter flex-col space-y-1">
             <img
-              className="w-full h-full object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
-              src="https://i.pinimg.com/564x/ce/d2/c6/ced2c6108c8fa422e52476eb6dbfd1a7.jpg"
-              onClick={() => calScore(1000,1000,2)}
+              className="w-full h-96 object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
+              src={p2?.img}
+              onClick={() => {
+                if (p1?.totalScore&&p2?.totalScore) {
+                  calScore(p2,p1,2)
+                }
+              }
+            }
             />
-            <h4 className="text-xl text-black prompt-regular">test2</h4>
+            <h4 className="text-xl text-black prompt-regular">{p2?.name}</h4>
             {p2score ? <h4 className="text-xl text-red-500 prompt-regular">{p2score}</h4> : <></>}
           </div>
         </div>
@@ -42,7 +69,10 @@ function HomePage() {
       </div>
     </div>
   );
-  function calScore(winner_score: number, loser_score: number, whoWin: number) {
+
+  async function calScore(pWin:PictureGetResponse,pLose:PictureGetResponse, whoWin: number) {
+    const winner_score = pWin.totalScore
+    const loser_score = pLose.totalScore
     const chanceWinA = 1 / (1 + 10 ** ((loser_score - winner_score) / 400));
     const chanceWinB = 1 / (1 + 10 ** ((winner_score - loser_score) / 400));
     const k_win =
@@ -63,12 +93,16 @@ function HomePage() {
         : 25;
     const scoreA = k_win * (1 - chanceWinA);
     const scoreB = k_lose * (0 - chanceWinB);
-    if (whoWin == 1) {
-        setP1score(scoreA)
-        setP2score(scoreB)
-    }else{
-        setP1score(scoreB)
-        setP2score(scoreA)
+    const up1 = await userService.vote(1,pWin.pid,scoreA,1)
+    const up2 = await userService.vote(1,pLose.pid,scoreB,0)
+    if (up1.affected_row==1&&up2.affected_row==1) {
+      if (whoWin == 1) {
+        setP1score(Math.round(scoreA))
+        setP2score(Math.round(scoreB))
+      }else{
+        setP1score(Math.round(scoreB))
+        setP2score(Math.round(scoreA))
+      }
     }
   }
 }
