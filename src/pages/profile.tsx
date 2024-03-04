@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { UserService } from "../services/userService";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
+import { PictureGetResponse } from "../model/pic_get_res";
 
 function ProfilePage() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -21,12 +22,15 @@ function ProfilePage() {
   const userService = new UserService();
 
   const [data, setData] = useState<UserGetPostResponse>();
+  const [pic, setPic] = useState<PictureGetResponse[]>([]);
   const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await userService.getByID(Number(id));
         setData(data!);
+        const pic = await userService.getPicByUID(Number(data!.uid));
+        setPic(pic!);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -61,86 +65,46 @@ function ProfilePage() {
             </div>
           ) : null}
           <hr className="h-px my-3 bg-gray-400"></hr>
-          <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-2">
-            <article>
-              <div className="aspect-square ">
-                <img
-                  className="w-[300px] h-[250px] object-fit rounded-2xl "
-                  src="https://i.pinimg.com/564x/a2/bd/0c/a2bd0c51798e428f8f506a7d12775bc3.jpg"
-                  alt=""
-                />
-                <div className=" flex  justify-between  border-red-300 border-2">
-                  <div className="flex flex-row justify-center items-center">
-                    <IconButton>
-                      <FavoriteIcon sx={{ color: "#E966A0" }} />
-                    </IconButton>
-                    <div className=" text-black text-xl  text-center">99</div>
-                  </div>
+          {pic != null ? (
+            <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-2">
+              {pic.map((p) => (
+                <article>
+                  <div className="aspect-square ">
+                    <img
+                      className="w-[300px] h-[250px] object-fit rounded-2xl "
+                      src={p.img}
+                      alt=""
+                    />
+                    <div className=" flex  justify-between  border-red-300 border-2">
+                      <div className="flex flex-row justify-center items-center">
+                        <IconButton>
+                          <FavoriteIcon sx={{ color: "#E966A0" }} />
+                        </IconButton>
+                        <div className=" text-black text-xl  text-center">
+                          {p.totalScore}
+                        </div>
+                      </div>
 
-                  <IconButton onClick={handleClick}>
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                    <MenuItem onClick={handleClose}>ลบ</MenuItem>
-                    <MenuItem onClick={handleClose}>เปลี่ยนรูป</MenuItem>
-                    <MenuItem onClick={handleClose}>ดูประวัติคะแนน</MenuItem>
-                  </Menu>
-                </div>
-              </div>
-            </article>
-            <article>
-              <div className="aspect-square ">
-                <img
-                  className="w-[300px] h-[250px] object-fit rounded-2xl "
-                  src="https://i.pinimg.com/564x/a2/bd/0c/a2bd0c51798e428f8f506a7d12775bc3.jpg"
-                  alt=""
-                />
-                <div className=" flex  justify-between  border-red-300 border-2">
-                  <div className="flex flex-row justify-center items-center">
-                    <IconButton>
-                      <FavoriteIcon sx={{ color: "#E966A0" }} />
-                    </IconButton>
-                    <div className=" text-black text-xl  text-center">99</div>
+                      <IconButton onClick={handleClick}>
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={handleClose}>ลบ</MenuItem>
+                        <MenuItem onClick={handleClose}>เปลี่ยนรูป</MenuItem>
+                        <MenuItem onClick={handleClose}>
+                          ดูประวัติคะแนน
+                        </MenuItem>
+                      </Menu>
+                    </div>
                   </div>
+                </article>
+              ))}
 
-                  <IconButton onClick={handleClick}>
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                    <MenuItem onClick={handleClose}>ลบ</MenuItem>
-                    <MenuItem onClick={handleClose}>เปลี่ยนรูป</MenuItem>
-                    <MenuItem onClick={handleClose}>ดูประวัติคะแนน</MenuItem>
-                  </Menu>
-                </div>
-              </div>
-            </article>
-            <article>
-              <div className="aspect-square ">
-                <img
-                  className="w-[300px] h-[250px] object-fit rounded-2xl "
-                  src="https://i.pinimg.com/564x/a2/bd/0c/a2bd0c51798e428f8f506a7d12775bc3.jpg"
-                  alt=""
-                />
-                <div className=" flex  justify-between  border-red-300 border-2">
-                  <div className="flex flex-row justify-center items-center">
-                    <IconButton>
-                      <FavoriteIcon sx={{ color: "#E966A0" }} />
-                    </IconButton>
-                    <div className=" text-black text-xl  text-center">99</div>
-                  </div>
-
-                  <IconButton onClick={handleClick}>
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                    <MenuItem onClick={handleClose}>ลบ</MenuItem>
-                    <MenuItem onClick={handleClose}>เปลี่ยนรูป</MenuItem>
-                    <MenuItem onClick={handleClose}>ดูประวัติคะแนน</MenuItem>
-                  </Menu>
-                </div>
-              </div>
-            </article>
-            {/* <div className="gird grid-cols-2">
+              {/* <div className="gird grid-cols-2">
               <img
                 className="w-[300px] h-[250px] object-cover rounded-2xl "
                 src="https://i.pinimg.com/564x/a2/bd/0c/a2bd0c51798e428f8f506a7d12775bc3.jpg"
@@ -156,10 +120,11 @@ function ProfilePage() {
               </div>
             </div> */}
 
-            <div className="h-[250px]  rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
-              <img className="h-fit" src="src\assets\addmedia.png" alt="" />
+              <div className="h-[250px]  rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
+                <img className="h-fit" src="src\assets\addmedia.png" alt="" />
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </>
