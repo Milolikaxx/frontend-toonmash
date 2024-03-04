@@ -20,19 +20,15 @@ function Header() {
     setUser(JSON.parse(localStorage.getItem("user")!));
   }, []);
 
-  const [admin, setAdmin] = useState<UserGetPostResponse>();
-
-  useEffect(() => {
-    setAdmin(JSON.parse(localStorage.getItem("admin")!));
-  }, []);
-  function navigateToSignIn() {
-    navigate("/login");
-  }
   function navigateToHome() {
     navigate("/");
   }
+  function navigateToSignIn() {
+    navigate("/login");
+  }
+
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "#2B2730", py: 0.5 }}>
+    <AppBar position="absolute" sx={{ backgroundColor: "#2B2730", py: 0.5 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <label className="ml-10 potta-one-regular text-4xl">TOONMASH</label>
         <div className="space-x-5 flex-row flex">
@@ -50,7 +46,7 @@ function Header() {
             Leaderboard
           </button>
 
-          {user != null ? (
+          {user?.type == 0 ? (
             <>
               <button
                 onClick={handleClick}
@@ -72,24 +68,24 @@ function Header() {
                 <MenuItem onClick={logout}>ออกจากระบบ</MenuItem>
               </Menu>
             </>
-          ) : admin != null ? (
+          ) : user?.type == 1 ? (
             <>
               <button
                 onClick={handleClick}
                 type="button"
                 className="flex whitespace-nowrap  text-white   text-sm text-center justify-center items-center"
               >
-                <Avatar src={admin.img} />
-                <h1 className="ml-2">{admin.name}</h1>
+                <Avatar src={user.img} />
+                <h1 className="ml-2">{user.name}</h1>
                 <ArrowDropDownIcon />
               </button>
               <Menu anchorEl={selectMenu} open={open} onClose={handleClose}>
                 <MenuItem
                   onClick={() => {
-                    navigate("/profile/" + admin.uid);
+                    navigate("/editprofile/" + user.uid);
                   }}
                 >
-                  โปรไฟล์ของฉัน
+                  แก้ไขโปรไฟล์ของฉัน
                 </MenuItem>
                 <MenuItem onClick={logout}>ออกจากระบบ</MenuItem>
               </Menu>
@@ -111,10 +107,6 @@ function Header() {
     if (user) {
       localStorage.removeItem("user");
       setUser(undefined);
-      navigate("/");
-    } else if (admin) {
-      localStorage.removeItem("admin");
-      setAdmin(undefined);
       navigate("/");
     }
   }

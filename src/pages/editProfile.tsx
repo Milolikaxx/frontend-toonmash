@@ -1,12 +1,12 @@
 // import { useNavigate } from "react-router-dom";
-import { Avatar, Button, Card, TextField } from "@mui/material";
+import { Avatar, Card, TextField } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 function EditPage() {
   // const navigate = useNavigate();
 
   return (
     <>
-      <div className="flex justify-center items-center">
+      <div className="h-screen flex justify-center items-center">
         <Card
           className="flex flex-col"
           sx={{
@@ -100,18 +100,13 @@ function EditPage() {
               }}
             />
             <div className="flex flex-row justify-center">
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#2B2730",
-                  borderRadius: 50,
-                  mt: 3,
-                  width: "100px",
-                  alignItems: "center",
-                }}
+              <button
+                onClick={() => {}}
+                type="button"
+                className="flex mt-5 whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
               >
-                save
-              </Button>
+                Sign in
+              </button>
             </div>
           </div>
         </Card>

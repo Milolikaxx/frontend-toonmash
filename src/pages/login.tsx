@@ -105,13 +105,9 @@ function LoginPage() {
     if (res == null) {
       setMsg("Invalid username or password");
       console.log("Invalid username or password");
-    }
-    if (res?.type == 0) {
+    } else {
       localStorage.setItem("user", JSON.stringify(res));
       navigate("/");
-    } else if (res?.type == 1) {
-      localStorage.setItem("admin", JSON.stringify(res));
-      navigate("/homeAdmin");
     }
   }
 }
