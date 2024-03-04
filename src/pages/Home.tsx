@@ -20,12 +20,12 @@ function HomePage() {
 
 
   return (
-    <div className="h-full w-screen flex justify-center items-center">
+    <div className="h-screen w-screen flex justify-center items-center">
       <div className="w-3/5 h-full flex flex-col items-center justify-start">
         <h1 className="mt-10 mb-10 text-4xl text-black font-bold prompt-regular">
           Who’s cooler? Click to choose.
         </h1>
-        <div className="w-full h-3/5 flex justify-between">
+        <div className="w-full h-3/5 flex justify-between items-center">
           <div className="w-2/5 h-full fxcenter flex-col space-y-1">
             <img
               className="w-full h-96 object-cover rounded-md cursor-pointer hover:ring-4 hover:ring-violet-600"
