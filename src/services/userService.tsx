@@ -43,6 +43,12 @@ export class UserService {
       return null;
     }
   }
+  async getAllPic() {
+    const url = HOST + "/pic";
+    const response = await axios.get(url);
+    const pic: PictureGetResponse[] = response.data;
+    return pic;
+  }
   async getPicByUID(uid: number) {
     const url = HOST + `/pic?uid=${uid}`;
     const response = await axios.get(url);
