@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 function HomePage() {
   const userService = new UserService();
+  const [pics, setPics] = useState<PictureGetResponse[]>([]);
   const [p1, setP1] = useState<PictureGetResponse>();
   const [p2, setP2] = useState<PictureGetResponse>();
   const [p1score, setP1score] = useState<number | undefined>(undefined);
@@ -12,10 +13,14 @@ function HomePage() {
   const navigate = useNavigate();
   useEffect(() => {
     const loadData = async () => {
-      let res = await userService.getPicByID(1);
-      setP1(res);
-      res = await userService.getPicByID(2);
-      setP2(res);
+      // let res = await userService.getPicByID(1);
+      // setP1(res);
+      // res = await userService.getPicByID(2);
+      // setP2(res);
+      const res = await userService.getAllPic();
+      const imgs = shuffleImages(res)
+      setPics(imgs)
+      loadNextImg()
       const userStr = localStorage.getItem("user");
       if (userStr) {
         const user: UserGetPostResponse = JSON.parse(userStr);
@@ -30,15 +35,15 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="h-full w-screen flex justify-center items-center">
-      <div className="w-3/5 h-full flex flex-col items-center justify-start">
-        <h1 className="mt-10 mb-10 text-4xl text-black font-bold prompt-regular">
+    <div className="h-screen w-screen flex justify-center items-center">
+      <div className="w-3/5 flex flex-col items-center justify-start">
+        <h1 className="mb-10 text-4xl text-black font-bold prompt-regular">
           Who’s cooler? Click to choose.
         </h1>
-        <div className="w-full h-3/5 flex justify-between">
-          <div className="w-2/5 h-full fxcenter flex-col space-y-1">
+        <div className="w-full h-3/5 flex justify-between items-center">
+          <div className="w-2/5 h-full fxcenter flex-col space-y-1 transition">
             <img
-              className="w-full h-96 object-cover rounded-md cursor-pointer hover:ring-4 hover:ring-violet-600"
+              className="w-full h-96 object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
               src={p1?.img}
               onClick={() => {
                 if (p1?.totalScore && p2?.totalScore) {
@@ -47,8 +52,26 @@ function HomePage() {
               }}
             />
             <h4 className="text-xl text-black prompt-regular">{p1?.name}</h4>
-            {p1score ? (
-              <h4 className="text-xl text-red-500 prompt-regular">{p1score}</h4>
+            {p1?.totalScore && p1score ? (
+              <>
+                {p1score > 0 ? (
+                  <h4 className="text-xl text-green-500 prompt-regular">
+                    +{p1score}
+                  </h4>
+                ) : p1score == 0 ? (
+                  <h4 className="text-xl text-black prompt-regular">
+                    {p1score}
+                  </h4>
+                ) : (
+                  <h4 className="text-xl text-red-500 prompt-regular">
+                    {p1score}
+                  </h4>
+                )}
+
+                <h4 className="text-xl text-violet-600 prompt-regular">
+                  {p1.totalScore + p1score}
+                </h4>
+              </>
             ) : (
               <></>
             )}
@@ -64,8 +87,25 @@ function HomePage() {
               }}
             />
             <h4 className="text-xl text-black prompt-regular">{p2?.name}</h4>
-            {p2score ? (
-              <h4 className="text-xl text-red-500 prompt-regular">{p2score}</h4>
+            {p2?.totalScore && p2score ? (
+              <>
+                {p2score > 0 ? (
+                  <h4 className="text-xl text-green-500 prompt-regular">
+                    +{p2score}
+                  </h4>
+                ) : p2score == 0 ? (
+                  <h4 className="text-xl text-black prompt-regular">
+                    {p2score}
+                  </h4>
+                ) : (
+                  <h4 className="text-xl text-red-500 prompt-regular">
+                    {p2score}
+                  </h4>
+                )}
+                <h4 className="text-xl text-violet-600 prompt-regular">
+                  {p2.totalScore + p2score}
+                </h4>
+              </>
             ) : (
               <></>
             )}
@@ -123,7 +163,35 @@ function HomePage() {
         setP1score(Math.round(scoreB));
         setP2score(Math.round(scoreA));
       }
+      delay(2000).then(()=>{
+        setP1score(undefined);
+        setP2score(undefined);
+        loadNextImg()
+      })
+      
     }
+    
+  }
+  function shuffleImages(images: PictureGetResponse[]) {
+    let currentIndex = images.length;
+    let randomIndex: number;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [images[currentIndex], images[randomIndex]] = [images[randomIndex], images[currentIndex]];
+    }
+
+    return images;
+  }
+  function loadNextImg() {
+    const selectImg : PictureGetResponse[] = pics.slice(0,2)
+    setP1(selectImg[0])
+    setP2(selectImg[1])
+    shuffleImages(pics)
+  }
+  async function delay(ms: number) {
+    return await new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
