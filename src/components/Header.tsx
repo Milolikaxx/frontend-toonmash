@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Button, Avatar, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Avatar, Menu, MenuItem } from "@mui/material";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { useEffect, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -25,38 +25,42 @@ function Header() {
   useEffect(() => {
     setAdmin(JSON.parse(localStorage.getItem("admin")!));
   }, []);
+  function navigateToSignIn() {
+    navigate("/login");
+  }
+  function navigateToHome() {
+    navigate("/");
+  }
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "#2B2730", py: 0.5 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <label className="ml-10 potta-one-regular text-4xl">TOONMASH</label>
-        <div className="space-x-5">
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#9575DE",
-
-              width: "100px",
-            }}
+        <div className="space-x-5 flex-row flex">
+          <button
+            onClick={navigateToHome}
+            type="button"
+            className="flex whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-md  text-sm px-5 py-2.5 text-center "
           >
             Home
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#9575DE",
-
-              width: "150px",
-            }}
+          </button>
+          <button
+            type="button"
+            className="flex whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-md  text-sm px-5 py-2.5 text-center "
           >
             Leaderboard
-          </Button>
+          </button>
+
           {user != null ? (
             <>
-              <Button onClick={handleClick}>
-                <Avatar src="/static/images/avatar/3.jpg" />
-                <h1 className="ml-5">{user.name}</h1>
+              <button
+                onClick={handleClick}
+                type="button"
+                className="flex whitespace-nowrap  text-white   text-sm text-center justify-center items-center"
+              >
+                <Avatar src={user.img} />
+                <h1 className="ml-2">{user.name}</h1>
                 <ArrowDropDownIcon />
-              </Button>
+              </button>
               <Menu anchorEl={selectMenu} open={open} onClose={handleClose}>
                 <MenuItem
                   onClick={() => {
@@ -70,15 +74,19 @@ function Header() {
             </>
           ) : admin != null ? (
             <>
-              <Button onClick={handleClick}>
-                <Avatar src="/static/images/avatar/3.jpg" />
-                <h1 className="ml-5">{admin.name}</h1>
+              <button
+                onClick={handleClick}
+                type="button"
+                className="flex whitespace-nowrap  text-white   text-sm text-center justify-center items-center"
+              >
+                <Avatar src={admin.img} />
+                <h1 className="ml-2">{admin.name}</h1>
                 <ArrowDropDownIcon />
-              </Button>
+              </button>
               <Menu anchorEl={selectMenu} open={open} onClose={handleClose}>
                 <MenuItem
                   onClick={() => {
-                    navigate("/profile");
+                    navigate("/profile/" + admin.uid);
                   }}
                 >
                   โปรไฟล์ของฉัน
@@ -87,19 +95,13 @@ function Header() {
               </Menu>
             </>
           ) : (
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#9575DE",
-
-                width: "100px",
-              }}
-              onClick={() => {
-                navigate("/login");
-              }}
+            <button
+              onClick={navigateToSignIn}
+              type="button"
+              className="flex whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-md  text-sm px-5 py-2.5 text-center "
             >
               Sign in
-            </Button>
+            </button>
           )}
         </div>
       </Toolbar>
