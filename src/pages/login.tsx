@@ -35,9 +35,9 @@ function LoginPage() {
               InputProps={{
                 sx: {
                   width: "80%",
-                  bgcolor: "#BA9CFF ",
-                  opacity: 0.2,
+                  bgcolor: "#E3D7FF",
                   color: "black",
+
                   ml: 5,
                 },
               }}
@@ -52,9 +52,7 @@ function LoginPage() {
               InputProps={{
                 sx: {
                   width: "80%",
-                  bgcolor: "#BA9CFF ",
-                  opacity: 0.2,
-
+                  bgcolor: "#E3D7FF",
                   ml: 5,
                 },
               }}

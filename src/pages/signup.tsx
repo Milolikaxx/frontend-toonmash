@@ -29,8 +29,8 @@ function SignUpPage() {
               InputProps={{
                 sx: {
                   width: "83%",
-                  bgcolor: "#BA9CFF ",
-                  opacity: 0.2,
+                  bgcolor: "#E3D7FF",
+
                   color: "black",
                   display: "flex",
                   justifyContent: "center",
@@ -48,8 +48,8 @@ function SignUpPage() {
               InputProps={{
                 sx: {
                   width: "83%",
-                  bgcolor: "#BA9CFF ",
-                  opacity: 0.2,
+                  bgcolor: "#E3D7FF",
+
                   color: "black",
                   ml: 5,
                 },
@@ -65,8 +65,8 @@ function SignUpPage() {
               InputProps={{
                 sx: {
                   width: "83%",
-                  bgcolor: "#BA9CFF ",
-                  opacity: 0.2,
+                  bgcolor: "#E3D7FF",
+
                   color: "black",
                   ml: 5,
                 },
@@ -82,8 +82,8 @@ function SignUpPage() {
               InputProps={{
                 sx: {
                   width: "83%",
-                  bgcolor: "#BA9CFF ",
-                  opacity: 0.2,
+                  bgcolor: "#E3D7FF",
+
                   color: "black",
                   ml: 5,
                 },

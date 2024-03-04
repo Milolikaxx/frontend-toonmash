@@ -30,6 +30,8 @@ function ProfilePage() {
         const userStr = localStorage.getItem("user");
         if (userStr) {
           const user: UserGetPostResponse = JSON.parse(userStr);
+          console.log(user);
+
           setData(user);
           const pic = await userService.getPicByUID(Number(user!.uid));
           setPic(pic!);
