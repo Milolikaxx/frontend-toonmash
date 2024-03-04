@@ -4,10 +4,10 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React, { useEffect, useState } from "react";
 import { UserService } from "../services/userService";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
-
+import AddIcon from "@mui/icons-material/Add";
 function ProfilePage() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -23,14 +23,17 @@ function ProfilePage() {
 
   const [data, setData] = useState<UserGetPostResponse>();
   const [pic, setPic] = useState<PictureGetResponse[]>([]);
-  const { id } = useParams();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await userService.getByID(Number(id));
-        setData(data!);
-        const pic = await userService.getPicByUID(Number(data!.uid));
-        setPic(pic!);
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+          const user: UserGetPostResponse = JSON.parse(userStr);
+          setData(user);
+          const pic = await userService.getPicByUID(Number(user!.uid));
+          setPic(pic!);
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -66,12 +69,12 @@ function ProfilePage() {
           ) : null}
           <hr className="h-px my-3 bg-gray-400"></hr>
           {pic != null ? (
-            <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-2">
+            <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-3">
               {pic.map((p) => (
                 <article>
                   <div className="aspect-square ">
                     <img
-                      className="w-[300px] h-[250px] object-fit rounded-2xl "
+                      className="w-[300px] h-[250px] object-cover rounded-2xl "
                       src={p.img}
                       alt=""
                     />
@@ -119,10 +122,11 @@ function ProfilePage() {
                 </div>
               </div>
             </div> */}
-
-              <div className="h-[250px]  rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
-                <img className="h-fit" src="src\assets\addmedia.png" alt="" />
-              </div>
+              {pic.length < 5 ? (
+                <div className="h-[250px]  rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
+                  <AddIcon sx={{ color: "#9575DE", fontSize: 150 }} />
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
