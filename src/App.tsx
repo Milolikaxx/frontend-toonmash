@@ -17,7 +17,7 @@ const routers = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "/profile/:id", element: <ProfilePage /> },
       { path: "/homeadmin", element: <HomeAdmin /> },
-      { path: "/editProfile", element: <EditPage /> },
+      { path: "/editProfile/:id", element: <EditPage /> },
     ],
     errorElement: <ErrorPage />,
   },

@@ -1,64 +1,76 @@
+import { useEffect, useState } from "react";
+import { UserGetPostResponse } from "../../model/response/user_getpost_response";
+import { UserService } from "../../services/userService";
+import styled from "@emotion/styled";
+import { Pagination } from "@mui/material";
+
 function HomeAdmin() {
+  const userService = new UserService();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [userdata, setData] = useState<UserGetPostResponse[]>([]);
+  const StyledPagination = styled(Pagination)({
+    "& .MuiPaginationItem-root": {
+      color: "black",
+    },
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await userService.getAllUser();
+        console.log(data?.length);
+
+        setData(data!);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  });
   return (
-    <div className="w-screen h-screen flex justify-start items-center mt-20 flex-col">
-      <h1 className="mb-12 text-center font-sans text-5xl font-bold text-gray-900">
-        All User
-      </h1>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5 xl:gap-4">
-        <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
-          <img
-            className="h-48 w-full object-cover"
-            src="https://i.pinimg.com/564x/4b/72/e6/4b72e6f2f88a0a787d29c036a99d58c7.jpg"
-            alt="Hotel Photo"
-          />
-
-          <div className="mt-1">
-            <h2 className="text-white text-center">Test</h2>
-          </div>
-        </article>
-        <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
-          <img
-            className="h-48 w-full object-cover"
-            src="https://i.pinimg.com/564x/67/3f/c3/673fc38a5e8814e2c71251bfe0bc4154.jpg"
-            alt="Hotel Photo"
-          />
-
-          <div className="mt-1">
-            <h2 className="text-white text-center">Test</h2>
-          </div>
-        </article>
-        <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
-          <img
-            className="h-48 w-full object-cover"
-            src="https://i.pinimg.com/564x/92/0c/d0/920cd05d2a316d4504499d811802bc66.jpg"
-          />
-
-          <div className="mt-1">
-            <h2 className="text-white text-center">Test</h2>
-          </div>
-        </article>
-        <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
-          <img
-            className="h-48 w-full object-cover"
-            src="https://i.pinimg.com/564x/f1/53/74/f15374812e2a62ec1a433b0c4697cede.jpg"
-          />
-
-          <div className="mt-1">
-            <h2 className="text-white text-center">Test</h2>
-          </div>
-        </article>
-        <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
-          <img
-            className="h-48 w-full object-cover"
-            src="https://i.pinimg.com/564x/51/d6/91/51d6910f25e1f639582d89f9b045bb58.jpg"
-          />
-
-          <div className="mt-1">
-            <h2 className="text-white text-center">Test</h2>
-          </div>
-        </article>
-      </div>
-    </div>
+    <>
+      {userdata != null ? (
+        <div className="w-screen h-full flex justify-start items-center mt-10 flex-col">
+          <h1 className="mb-10 text-center font-sans text-4xl font-bold text-gray-900">
+            All User
+          </h1>
+          {userdata.length <= 10 ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5 xl:gap-4">
+              {userdata.slice(0, 10).map((user) => (
+                <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
+                  <img className="h-48 w-48 object-cover" src={user?.img} />
+                  <div className="mt-1">
+                    <h2 className="text-white text-center">{user?.name}</h2>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : userdata.length > 10 ? (
+            <>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5 xl:gap-4">
+                {userdata.map((user) => (
+                  <article className=" rounded-md p-2 bg-black hover:scale-105 hover:shadow-md hover:shadow-black">
+                    <img className="h-48 w-full object-cover" src={user?.img} />
+                    <div className="mt-1">
+                      <h2 className="text-white text-center">{user?.name}</h2>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <StyledPagination
+                className="flex justify-center pb-9 "
+                count={Math.round(Number(userdata.length) / 10)}
+                page={currentPage}
+                onChange={(_event, value) => {
+                  console.log(value);
+                  setCurrentPage(value);
+                }}
+              />
+            </>
+          ) : null}
+        </div>
+      ) : null}
+    </>
   );
 }
 

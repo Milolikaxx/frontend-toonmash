@@ -1,13 +1,14 @@
-import { Button, TextField } from "@mui/material";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../services/userService";
+import { TextField } from "@mui/material";
 
 function LoginPage() {
   const navigate = useNavigate();
   const inputUsername = useRef<HTMLInputElement>();
   const inputPass = useRef<HTMLInputElement>();
   const userService = new UserService();
+  const [msg, setMsg] = useState("");
   function navigateToSignUp() {
     navigate("/signup");
   }
@@ -18,7 +19,7 @@ function LoginPage() {
           <img src="src\assets\login.png" alt="" />
         </div>
         <div className="flex md:w-3/5 justify-center  ">
-          <div className=" w-96 h-96 bg-white rounded-2xl shadow-2xl justify-start  flex flex-col">
+          <div className="w-[400px] h-[400px] bg-white rounded-2xl shadow-2xl justify-start  flex flex-col">
             <label className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5">
               TOONMASH
             </label>
@@ -58,16 +59,11 @@ function LoginPage() {
                 },
               }}
             />
+            <label className="text-base  text-start text-red-600 ml-10 mt-2">
+              {msg}
+            </label>
             <div className="flex flex-row justify-center">
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#9575DE",
-                  borderRadius: 50,
-                  mt: 3,
-                  width: "100px",
-                  alignItems: "center",
-                }}
+              <button
                 onClick={() => {
                   if ((inputUsername.current, inputPass.current)) {
                     btnLogin(
@@ -78,9 +74,11 @@ function LoginPage() {
                     );
                   }
                 }}
+                type="button"
+                className="flex mt-2 whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
               >
                 Sign in
-              </Button>
+              </button>
             </div>
             <div className="flex flex-row justify-center">
               <label className="text-black  text-sm font-thin  prompt-regular  mt-5">
@@ -104,14 +102,16 @@ function LoginPage() {
   async function btnLogin(username: string, password: string) {
     const res = await userService.login(username, password);
     console.log(res);
-    if (res.type == 0) {
+    if (res == null) {
+      setMsg("Invalid username or password");
+      console.log("Invalid username or password");
+    }
+    if (res?.type == 0) {
       localStorage.setItem("user", JSON.stringify(res));
       navigate("/");
-    } else if (res.type == 1) {
+    } else if (res?.type == 1) {
       localStorage.setItem("admin", JSON.stringify(res));
       navigate("/homeAdmin");
-    } else {
-      console.log("Invalid username or password");
     }
   }
 }
