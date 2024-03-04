@@ -30,8 +30,8 @@ function HomeAdmin() {
   return (
     <>
       {userdata != null ? (
-        <div className="w-screen h-full flex justify-start items-center mt-10 flex-col">
-          <h1 className="mb-10 text-center font-sans text-4xl font-bold text-gray-900">
+        <div className="w-screen h-full flex justify-start items-center flex-col">
+          <h1 className="mt-32 mb-10 text-center font-sans text-4xl font-bold text-gray-900">
             All User
           </h1>
           {userdata.length <= 10 ? (

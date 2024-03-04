@@ -43,34 +43,29 @@ export class UserService {
       return null;
     }
   }
-  async getByPicUID(id: number) {
-    const url = HOST + "/pic/" + id;
+  async getPicByUID(uid: number) {
+    const url = HOST + `/pic?uid=${uid}`;
     const response = await axios.get(url);
-    if (response.status == 200) {
-      const user: UserGetPostResponse = response.data;
-      return user;
-    } else {
-      console.log("faild data ");
-      return null;
-    }
+    const pic: PictureGetResponse[] = response.data;
+    return pic;
   }
-  async getPicByID(id:number){
+  async getPicByID(id: number) {
     const url = HOST + `/pic?id=${id}`;
     const response = await axios.get(url);
     const pic: PictureGetResponse = response.data;
     return pic;
   }
-  async vote(uid:number,pid:number,score:number,isWin:number){
+  async vote(uid: number, pid: number, score: number, isWin: number) {
     const url = HOST + "/vote";
     const body = {
       uid: uid,
       pid: pid,
-      score:score,
-      isWin:isWin
+      score: score,
+      isWin: isWin,
     };
     const response = await axios.post(url, body);
-    const aff: VotePostResponse = response.data
-    console.log(aff.affected_row)
+    const aff: VotePostResponse = response.data;
+    console.log(aff.affected_row);
     return aff;
   }
 }
