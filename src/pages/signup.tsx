@@ -14,11 +14,20 @@ function SignUpPage() {
           <label className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5 mb-10">
             TOONMASH
           </label>
-          <div className=" w-3/6 h-auto bg-white  flex flex-col">
-            <label className="text-black font-bold text-3xl prompt-reg rounded-xl shadow-2xl  ml-10 mt-5 text-center">
+          <div className="w-2/5 bg-white  flex flex-col rounded-3xl ">
+            <label className="text-black font-bold text-3xl prompt-reg rounded-xl shadow-2xl   mt-5 text-center">
               Sign Up
             </label>
+            <div className="mt-5 flex flex-row justify-center">
+              {/* {imgUrl != null ? (
+                <Avatar sx={{ width: 100, height: 100 }} src={imgUrl} />
+              ) : null} */}
 
+              <form className="form">
+                <input type="file" />
+                <button type="submit">Upload</button>
+              </form>
+            </div>
             <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
               Username
             </label>
@@ -122,5 +131,4 @@ function SignUpPage() {
     </>
   );
 }
-
 export default SignUpPage;
