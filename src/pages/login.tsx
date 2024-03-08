@@ -26,7 +26,7 @@ function LoginPage() {
             <label className="text-black font-bold text-2xl prompt-regular ml-10 mt-5">
               Sign in
             </label>
-            <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
+            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Username
             </label>
             <TextField
@@ -42,7 +42,7 @@ function LoginPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
+            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Password
             </label>
             <TextField
@@ -79,11 +79,11 @@ function LoginPage() {
               </button>
             </div>
             <div className="flex flex-row justify-center">
-              <label className="text-black  text-sm font-thin  prompt-regular  mt-5">
+              <label className="text-black  text-sm font-light   prompt-regular  mt-5">
                 I don’t have an account ?
               </label>
               <a
-                className="text-violet-500  text-sm font-thin  prompt-regular ml-2 mt-5 cursor-pointer"
+                className="text-violet-600 text-sm font-normal prompt-regular ml-2 mt-5 cursor-pointer"
                 onClick={() => {
                   console.log("sign up");
                   navigateToSignUp();

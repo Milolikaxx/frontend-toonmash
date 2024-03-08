@@ -33,7 +33,12 @@ function Header() {
   return (
     <AppBar position="absolute" sx={{ backgroundColor: "#2B2730", py: 0.5 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <label className="ml-10 potta-one-regular text-4xl">TOONMASH</label>
+        <label
+          className="ml-10 potta-one-regular text-4xl cursor-pointer"
+          onClick={navigateToHome}
+        >
+          TOONMASH
+        </label>
         <div className="space-x-5 flex-row flex">
           <button
             onClick={navigateToHome}
@@ -43,7 +48,7 @@ function Header() {
             Home
           </button>
           <button
-          onClick={navigateToLeaderboard}
+            onClick={navigateToLeaderboard}
             type="button"
             className="flex whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-md  text-sm px-5 py-2.5 text-center "
           >

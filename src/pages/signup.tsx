@@ -1,6 +1,12 @@
-import { Button, TextField } from "@mui/material";
+import { Avatar, Button, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
+  const navigate = useNavigate();
+
+  function navigateToLogin() {
+    navigate("/login");
+  }
   return (
     <>
       <div
@@ -19,16 +25,9 @@ function SignUpPage() {
               Sign Up
             </label>
             <div className="mt-5 flex flex-row justify-center">
-              {/* {imgUrl != null ? (
-                <Avatar sx={{ width: 100, height: 100 }} src={imgUrl} />
-              ) : null} */}
-
-              <form className="form">
-                <input type="file" />
-                <button type="submit">Upload</button>
-              </form>
+              <Avatar sx={{ width: 100, height: 100 }} src=""></Avatar>
             </div>
-            <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
+            <label className="text-black  text-sm font-light prompt-regular ml-10 mt-5">
               Username
             </label>
             <TextField
@@ -47,7 +46,7 @@ function SignUpPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
+            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Name
             </label>
             <TextField
@@ -64,7 +63,7 @@ function SignUpPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
+            <label className="text-black text-sm font-light  prompt-regular ml-10 mt-5">
               Password
             </label>
             <TextField
@@ -81,7 +80,7 @@ function SignUpPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
+            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Comfirm Password
             </label>
             <TextField
@@ -113,12 +112,13 @@ function SignUpPage() {
               </Button>
             </div>
             <div className="flex flex-row justify-center mb-5">
-              <label className="text-black  text-sm font-thin  prompt-regular  mt-5">
+              <label className="text-black  text-sm font-light  prompt-regular  mt-5">
                 I have an account ?
               </label>
               <a
-                className="text-violet-500  text-sm font-thin  prompt-regular ml-2 mt-5"
+                className="text-violet-500  text-sm font-normal  prompt-regular ml-2 mt-5 cursor-pointer"
                 onClick={() => {
+                  navigateToLogin;
                   console.log("login");
                 }}
               >
