@@ -49,13 +49,13 @@ function ProfilePage() {
   }, [userService]);
   return (
     <>
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="w-full h-screen flex justify-center items-center">
         {loading ? (
           <CircularProgress />
         ) : (
-          <div className="w-2/4 h-3/4 flex  flex-col boder-2 border-gray-700">
+          <div className="w-2/4 h-3/4 flex flex-col">
             {data.current != null ? (
-              <div className="flex flex-row justify-between border-2 border-red-700">
+              <div className="flex flex-row justify-between">
                 <div className="flex flex-row justify-center items-center">
                   <Avatar
                     sx={{ width: 200, height: 200 }}
@@ -138,8 +138,8 @@ function ProfilePage() {
               </div>
             </div> */}
                 {pics.current.length < 5 ? (
-                  <div className="h-[250px]  rounded-2xl border-4 border-violet-500 flex justify-center items-center cursor-pointer">
-                    <AddIcon sx={{ color: "#9575DE", fontSize: 150 }} />
+                  <div onClick={()=>navigate("/uploadpic")} className="group h-[250px]  rounded-2xl border-4 border-violet-500 hover:bg-violet-500 transition flex justify-center items-center cursor-pointer">
+                    <AddIcon className="hover:text-white" sx={{ color: "#9575DE", fontSize: 150 }} />
                   </div>
                 ) : null}
               </div>
