@@ -2,10 +2,12 @@ import axios from "axios";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
 import { VotePostResponse } from "../model/vote_post_res";
+import { UploadPostResponse } from "../model/upload_post_res";
 
 export const HOST = "http://localhost:3001";
 
 export class UserService {
+  // user = useRef<UserGetPostResponse | undefined>(undefined);
   async login(username: string, name: string) {
     const url = HOST + "/user/login";
     const body = {
@@ -61,6 +63,16 @@ export class UserService {
     const pic: PictureGetResponse = response.data;
     return pic;
   }
+  async addNewPic(uid:number,img:string) {
+    const url = HOST + "/pic";
+    const body = {
+      user_id: uid,
+      img: img
+    };
+    const response = await axios.post(url, body);
+    const res: VotePostResponse = response.data;
+    return res.affected_row;
+  }
   async vote(
     winner: number,
     loser: number,
@@ -76,7 +88,14 @@ export class UserService {
     };
     const response = await axios.post(url, body);
     const aff: VotePostResponse = response.data;
-    console.log(aff.affected_row);
     return aff;
+  }
+  async uploadPic(file:File){
+    const url = HOST + "/upload";
+    const formData = new FormData();
+    formData.append("filename", file);
+    const response = await axios.post(url, formData);
+    const res: UploadPostResponse = response.data;
+    return res.url;
   }
 }
