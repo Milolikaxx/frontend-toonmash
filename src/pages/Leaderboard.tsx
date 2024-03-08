@@ -30,17 +30,29 @@ function LeaderboardPage() {
         <CircularProgress />
       ) : (
         <div className="w-3/5 h-full flex flex-col justify-center items-center">
-        <div className="text-5xl text-black mt-16 mb-5 prompt-regular font-bold">Leaderboard</div>
+          <div className="text-5xl text-black mt-16 mb-5 prompt-regular font-bold">
+            Leaderboard
+          </div>
           <div className="grid grid-cols-12 gap-4">
             {pics.current ? (
               <div className="col-span-full flex flex-col justify-center items-center">
-                <div className="flex flex-col justify-center items-center bg-black p-2">
-                    <img src={pics.current[0].img} style={{maxHeight:"200px"}}/>
-                    <div>
-                        
-                    </div>
+                <div className="flex flex-col justify-center items-center bg-amber-400 px-2 pt-2 py-1">
+                  <img
+                    src={pics.current[0].img}
+                    style={{ maxHeight: "200px" }}
+                  />
+                  <img
+                    src="src\assets\1.png"
+                    className="rank"
+                    style={{
+                      height: "60px",
+                    }}
+                  />
+                  <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
+                    <div>{pics.current[0].name}</div>
+                    <div>{pics.current[0].totalScore}</div>
+                  </div>
                 </div>
-                
               </div>
             ) : (
               <></>
@@ -48,7 +60,7 @@ function LeaderboardPage() {
             {pics.current ? (
               pics.current.slice(1, 4).map((pic) => (
                 <div className="col-span-4 flex justify-center items-center">
-                  <img src={pic.img} style={{maxHeight:"180px"}}/>
+                  <img src={pic.img} style={{ maxHeight: "180px" }} />
                 </div>
               ))
             ) : (
@@ -57,7 +69,10 @@ function LeaderboardPage() {
             {pics.current ? (
               pics.current.slice(4, 10).map((pic) => (
                 <div className="col-span-2 flex justify-center items-center">
-                  <img src={pic.img} style={{height:"100%", objectFit:"cover"}}/>
+                  <img
+                    src={pic.img}
+                    style={{ height: "100%", objectFit: "cover" }}
+                  />
                 </div>
               ))
             ) : (

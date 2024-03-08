@@ -31,7 +31,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="absolute" sx={{ backgroundColor: "#2B2730", py: 0.5 }}>
+    <AppBar position="absolute" sx={{ backgroundColor: "#2B2730", py: 0.2 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <label className="ml-10 potta-one-regular text-4xl">TOONMASH</label>
         <div className="space-x-5 flex-row flex">
