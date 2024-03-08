@@ -9,12 +9,14 @@ import ProfilePage from "./pages/profile";
 import HomeAdmin from "./pages/Admin/homeAdmin";
 
 import EditPage from "./pages/editProfile";
+import LeaderboardPage from "./pages/Leaderboard";
 const routers = createBrowserRouter([
   {
     path: "",
     element: <RootPage />,
     children: [
       { path: "", element: <HomePage /> },
+      { path: "/leaderboard", element: <LeaderboardPage /> },
       { path: "/profile/:id", element: <ProfilePage /> },
       { path: "/homeadmin", element: <HomeAdmin /> },
       { path: "/editProfile/:id", element: <EditPage /> },
