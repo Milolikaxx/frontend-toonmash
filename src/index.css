@@ -23,16 +23,24 @@
   align-items: center;
 }
 
-.rank{
+.rank1{
   position: absolute;
   margin-left: -215px;
   margin-top: 210px;
+  z-index: 100;
+}
+.rank {
+  position: absolute;
+  margin-left: -195px;
+  margin-top: 180px;
   z-index: 100;
 }
 
 a:hover {
   text-decoration: underline;
 }
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

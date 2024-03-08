@@ -3,7 +3,7 @@ import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
 import { VotePostResponse } from "../model/vote_post_res";
 
-export const HOST = "http://localhost:3000";
+export const HOST = "http://localhost:3001";
 
 export class UserService {
   async login(username: string, name: string) {
@@ -61,7 +61,12 @@ export class UserService {
     const pic: PictureGetResponse = response.data;
     return pic;
   }
-  async vote(winner: number, loser: number, scoreWin: number, scoreLose: number) {
+  async vote(
+    winner: number,
+    loser: number,
+    scoreWin: number,
+    scoreLose: number
+  ) {
     const url = HOST + "/vote";
     const body = {
       winner: winner,
