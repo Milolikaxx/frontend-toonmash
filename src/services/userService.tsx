@@ -61,13 +61,13 @@ export class UserService {
     const pic: PictureGetResponse = response.data;
     return pic;
   }
-  async vote(uid: number, pid: number, score: number, isWin: number) {
+  async vote(winner: number, loser: number, scoreWin: number, scoreLose: number) {
     const url = HOST + "/vote";
     const body = {
-      uid: uid,
-      pid: pid,
-      score: score,
-      isWin: isWin,
+      winner: winner,
+      loser: loser,
+      scoreWin: scoreWin,
+      scoreLose: scoreLose,
     };
     const response = await axios.post(url, body);
     const aff: VotePostResponse = response.data;

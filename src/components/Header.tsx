@@ -23,6 +23,9 @@ function Header() {
   function navigateToHome() {
     navigate("/");
   }
+  function navigateToLeaderboard() {
+    navigate("/leaderboard");
+  }
   function navigateToSignIn() {
     navigate("/login");
   }
@@ -40,6 +43,7 @@ function Header() {
             Home
           </button>
           <button
+          onClick={navigateToLeaderboard}
             type="button"
             className="flex whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-md  text-sm px-5 py-2.5 text-center "
           >

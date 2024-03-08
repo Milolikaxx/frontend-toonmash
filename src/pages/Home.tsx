@@ -3,10 +3,12 @@ import { PictureGetResponse } from "../model/pic_get_res";
 import { UserService } from "../services/userService";
 import { useNavigate } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
+import { CircularProgress } from "@mui/material";
 function HomePage() {
   const userService = useMemo(() => {
     return new UserService();
   }, []);
+  const [loading, setLoading] = useState(true);
   const pics = useRef<PictureGetResponse[]>([]);
   const user = useRef<UserGetPostResponse | undefined>(undefined);
   // const [pics, setPics] = useState<PictureGetResponse[]>([]);
@@ -17,32 +19,36 @@ function HomePage() {
   const navigate = useNavigate();
   useEffect(() => {
     const loadData = async () => {
-      // let res = await userService.getPicByID(1);
-      // setP1(res);
-      // res = await userService.getPicByID(2);
-      // setP2(res);
-      const res = await userService.getAllPic();
-      const imgs = shuffleImages(res);
-      pics.current = imgs;
-      const userStr = localStorage.getItem("user");
-      if (userStr) {
-        user.current = JSON.parse(userStr);
-        if (user.current) {
-          if (user.current.type == 0) {
-            navigate("/");
-          } else if (user.current.type == 1) {
-            navigate("/homeadmin");
+      try {
+        const res = await userService.getAllPic();
+        const imgs = shuffleImages(res);
+        pics.current = imgs;
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+          user.current = JSON.parse(userStr);
+          if (user.current) {
+            if (user.current.type == 0) {
+              navigate("/");
+            } else if (user.current.type == 1) {
+              navigate("/homeadmin");
+            }
           }
         }
+        loadNextImg();
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
-      loadNextImg();
     };
     loadData();
   }, [navigate, userService]);
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      {pics.current.length >= 2 || (p1 && p2) ? (
+      {loading ? (
+        <CircularProgress/>
+      ) : p1 && p2 ? (
         <div className="w-3/5 flex flex-col items-center justify-start">
           <h1 className="mb-10 text-4xl text-black font-bold prompt-regular">
             Who’s cooler? Click to choose.
@@ -165,17 +171,21 @@ function HomePage() {
         : loser_score > 600
         ? 15
         : 25;
-    const scoreA = k_win * (1 - chanceWinA);
-    const scoreB = k_lose * (0 - chanceWinB);
-    const up1 = await userService.vote(1, pWin.pid, scoreA, 1);
-    const up2 = await userService.vote(1, pLose.pid, scoreB, 0);
-    if (up1.affected_row == 1 && up2.affected_row == 1) {
+    const winPoints = k_win * (1 - chanceWinA);
+    const losePoints = k_lose * (0 - chanceWinB);
+    const res = await userService.vote(
+      pWin.pid,
+      pLose.pid,
+      winPoints,
+      losePoints
+    );
+    if (res.affected_row == 1) {
       if (whoWin == 1) {
-        setP1score(Math.round(scoreA));
-        setP2score(Math.round(scoreB));
+        setP1score(Math.round(winPoints));
+        setP2score(Math.round(losePoints));
       } else {
-        setP1score(Math.round(scoreB));
-        setP2score(Math.round(scoreA));
+        setP1score(Math.round(losePoints));
+        setP2score(Math.round(winPoints));
       }
       delay(2000).then(() => {
         setP1score(undefined);
@@ -197,12 +207,10 @@ function HomePage() {
         images[currentIndex],
       ];
     }
-    console.log(images);
     return images;
   }
   function loadNextImg() {
     const selectImg: PictureGetResponse[] = pics.current.splice(0, 2);
-    console.log(pics.current);
 
     setP1(selectImg[0]);
     setP2(selectImg[1]);
