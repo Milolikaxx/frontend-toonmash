@@ -30,7 +30,7 @@ export class UserService {
       const user: UserGetPostResponse[] = response.data;
       return user;
     } else {
-      console.log("faild data ");
+      console.log("failed data ");
       return null;
     }
   }
@@ -41,7 +41,7 @@ export class UserService {
       const user: UserGetPostResponse = response.data;
       return user;
     } else {
-      console.log("faild data ");
+      console.log("failed data ");
       return null;
     }
   }
