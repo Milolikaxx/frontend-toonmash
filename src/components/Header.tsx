@@ -66,7 +66,7 @@ function Header() {
                 <h1 className="ml-2">{user.name}</h1>
                 <ArrowDropDownIcon />
               </button>
-              <Menu anchorEl={selectMenu} open={open} onClose={handleClose}>
+              <Menu anchorEl={selectMenu} onClick={handleClose} open={open} onClose={handleClose}>
                 <MenuItem
                   onClick={() => {
                     navigate("/profile/" + user.uid);
@@ -88,7 +88,7 @@ function Header() {
                 <h1 className="ml-2">{user.name}</h1>
                 <ArrowDropDownIcon />
               </button>
-              <Menu anchorEl={selectMenu} open={open} onClose={handleClose}>
+              <Menu anchorEl={selectMenu} onClick={handleClose} open={open} onClose={handleClose}>
                 <MenuItem
                   onClick={() => {
                     navigate("/editprofile/" + user.uid);

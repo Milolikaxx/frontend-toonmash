@@ -65,7 +65,7 @@ function HomePage() {
                   }
                 }}
               />
-              <h4 className="text-xl text-black prompt-regular">{p1?.name}</h4>
+              {user.current && <h4 className="text-xl text-black prompt-regular">{p1?.name}</h4>}
               {p1?.totalScore && p1score ? (
                 <>
                   {p1score > 0 ? (
@@ -100,7 +100,7 @@ function HomePage() {
                   }
                 }}
               />
-              <h4 className="text-xl text-black prompt-regular">{p2?.name}</h4>
+              {user.current && <h4 className="text-xl text-black prompt-regular">{p2?.name}</h4>}
               {p2?.totalScore && p2score ? (
                 <>
                   {p2score > 0 ? (

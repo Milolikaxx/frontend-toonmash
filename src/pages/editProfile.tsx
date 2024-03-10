@@ -26,7 +26,6 @@ function EditPage() {
         if (userStr) {
           const user: UserGetPostResponse = JSON.parse(userStr);
           console.log(user);
-
           userdata.current = user;
         }
       } catch (error) {
