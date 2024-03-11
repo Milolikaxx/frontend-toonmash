@@ -28,6 +28,7 @@ function ProfilePage() {
   const pics = useRef<PictureGetResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [own, setOwn] = useState(true);
+  const [isAdmin, setAdmin] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,8 +46,13 @@ function ProfilePage() {
             uid = +id!;
             setOwn(false);
           }
+          if (user.type == 1) {
+            setAdmin(true);
+          }
           const pic = await userService.getPicByUID(+uid);
           pics.current = pic;
+        } else {
+          navigate("/");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -55,7 +61,7 @@ function ProfilePage() {
       }
     };
     fetchData();
-  }, [id, userService]);
+  }, [id, navigate, userService]);
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">
@@ -94,24 +100,22 @@ function ProfilePage() {
               </div>
             ) : null}
             <hr className="h-px my-3 bg-gray-400"></hr>
-            {pics.current != null ? (
-              <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-3">
-                {pics.current.map((p) => (
+            <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-3">
+              {pics.current.length > 0 ? (
+                pics.current.map((p) => (
                   <article>
-                    <div
-                      className="aspect-square"
-                    >
+                    <div className="aspect-square">
                       <div className="w-full overflow-hidden rounded-t-2xl">
                         <img
-                        className="w-[300px] h-[250px] object-cover rounded-t-2xl cursor-pointer transition duration-300 hover:scale-110"
-                        src={p.img}
-                        alt=""
-                        onClick={() => {
-                          navigate(`/chart/` + p.pid);
-                        }}
-                      />
+                          className="w-[300px] h-[250px] object-cover rounded-t-2xl cursor-pointer transition duration-300 hover:scale-110"
+                          src={p.img}
+                          alt=""
+                          onClick={() => {
+                            navigate(`/chart/` + p.pid);
+                          }}
+                        />
                       </div>
-                      
+
                       <div className=" flex  justify-between  border-red-300 border-2">
                         <div className="flex flex-row justify-center items-center">
                           <IconButton>
@@ -121,54 +125,70 @@ function ProfilePage() {
                             {p.totalScore}
                           </div>
                         </div>
+                        {own && (
+                          <>
+                            <IconButton onClick={handleClick}>
+                              <MoreVertIcon />
+                            </IconButton>
 
-                        <IconButton onClick={handleClick}>
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                        >
-                          <MenuItem onClick={handleClose}>ลบ</MenuItem>
-                          <MenuItem onClick={handleClose}>เปลี่ยนรูป</MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            ดูประวัติคะแนน
-                          </MenuItem>
-                        </Menu>
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={handleClose}
+                            >
+                              <MenuItem onClick={handleClose}>ลบ</MenuItem>
+
+                              <MenuItem onClick={handleClose}>
+                                เปลี่ยนรูป
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                ดูประวัติคะแนน
+                              </MenuItem>
+                            </Menu>
+                          </>
+                        )}
+                        {isAdmin && (
+                          <>
+                            <IconButton onClick={handleClick}>
+                              <MoreVertIcon />
+                            </IconButton>
+
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={handleClose}
+                            >
+                              <MenuItem onClick={handleClose}>ลบ</MenuItem>
+
+                              <MenuItem onClick={handleClose}>
+                                เปลี่ยนรูป
+                              </MenuItem>
+
+                              <MenuItem onClick={handleClose}>
+                                ดูประวัติคะแนน
+                              </MenuItem>
+                            </Menu>
+                          </>
+                        )}
                       </div>
                     </div>
                   </article>
-                ))}
-
-                {/* <div className="gird grid-cols-2">
-              <img
-                className="w-[300px] h-[250px] object-cover rounded-2xl "
-                src="https://i.pinimg.com/564x/a2/bd/0c/a2bd0c51798e428f8f506a7d12775bc3.jpg"
-                alt=""
-              />
-              <div className="w-[300px] h-7 flex flex-row justify-between border-red-300 border-2 whitespace-nowrap">
-                <div className="flex flex-row items-center">
-                  <IconButton>
-                    <FavoriteIcon sx={{ color: "#E966A0" }} />
-                  </IconButton>
-                  <div className=" text-black text-xl ">99</div>
+                ))
+              ) : (
+                <></>
+              )}
+              {pics.current.length < 5 && own && (
+                <div
+                  onClick={() => navigate("/uploadpic")}
+                  className="group h-[250px]  rounded-2xl border-4 border-violet-500 hover:bg-violet-500 transition flex justify-center items-center cursor-pointer "
+                >
+                  <AddIcon
+                    className="group-hover:text-white"
+                    sx={{ color: "#9575DE", fontSize: 150 }}
+                  />
                 </div>
-              </div>
-            </div> */}
-                {pics.current.length < 5 ? (
-                  <div
-                    onClick={() => navigate("/uploadpic")}
-                    className="group h-[250px]  rounded-2xl border-4 border-violet-500 hover:bg-violet-500 transition flex justify-center items-center cursor-pointer"
-                  >
-                    <AddIcon
-                      className="hover:text-white"
-                      sx={{ color: "#9575DE", fontSize: 150 }}
-                    />
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
+              )}
+            </div>
           </div>
         )}
       </div>

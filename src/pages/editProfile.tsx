@@ -25,8 +25,9 @@ function EditPage() {
         const userStr = localStorage.getItem("user");
         if (userStr) {
           const user: UserGetPostResponse = JSON.parse(userStr);
-          console.log(user);
           userdata.current = user;
+        } else {
+          navigate("/");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -35,7 +36,7 @@ function EditPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
   return (
     <>
       <div className="h-screen flex justify-center items-center">
@@ -66,9 +67,9 @@ function EditPage() {
               />
             </div>
             <div className="flex flex-col justify-start">
-              <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
+              <div className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
                 Username
-              </label>
+              </div>
               <TextField
                 size="small"
                 inputRef={inputUsername}
@@ -85,9 +86,9 @@ function EditPage() {
                   },
                 }}
               />
-              <label className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
+              <div className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
                 Name
-              </label>
+              </div>
               <TextField
                 size="small"
                 inputRef={inputname}
@@ -102,9 +103,9 @@ function EditPage() {
                   },
                 }}
               />
-              <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
+              <div className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
                 Password
-              </label>
+              </div>
               <TextField
                 size="small"
                 inputRef={inputPass}
@@ -119,9 +120,9 @@ function EditPage() {
                   },
                 }}
               />
-              <label className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
+              <div className="text-black  text-sm font-thin  prompt-regular ml-10 mt-5">
                 Comfirm Password
-              </label>
+              </div>
               <TextField
                 size="small"
                 inputRef={inputPassCom}

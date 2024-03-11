@@ -11,6 +11,7 @@ function LeaderboardPage() {
   const [loading, setLoading] = useState(true);
   const pics = useRef<PictureGetResponse[]>([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -51,7 +52,14 @@ function LeaderboardPage() {
                       }}
                     />
                     <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
-                      <div>{pics.current[0].name}</div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          navigate("/profile/" + pics.current[0].user_id);
+                        }}
+                      >
+                        {pics.current[0].name}
+                      </div>
                       <div>{pics.current[0].totalScore}</div>
                     </div>
                   </div>
@@ -71,7 +79,14 @@ function LeaderboardPage() {
                       }}
                     />
                     <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
-                      <div>{pics.current[1].name}</div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          navigate("/profile/" + pics.current[1].user_id);
+                        }}
+                      >
+                        {pics.current[1].name}
+                      </div>
                       <div>{pics.current[1].totalScore}</div>
                     </div>
                   </div>
@@ -95,7 +110,14 @@ function LeaderboardPage() {
                       }}
                     />
                     <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
-                      <div>{pics.current[2].name}</div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          navigate("/profile/" + pics.current[2].user_id);
+                        }}
+                      >
+                        {pics.current[2].name}
+                      </div>
                       <div>{pics.current[2].totalScore}</div>
                     </div>
                   </div>
@@ -108,7 +130,14 @@ function LeaderboardPage() {
                     />
 
                     <div className="w-full flex justify-between items-end font-bold prompt-regular">
-                      <div>{pics.current[3].name}</div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          navigate("/profile/" + pics.current[3].user_id);
+                        }}
+                      >
+                        {pics.current[3].name}
+                      </div>
                       <div>{pics.current[3].totalScore}</div>
                     </div>
                   </div>
@@ -126,7 +155,16 @@ function LeaderboardPage() {
                         }}
                       />
                       <div className="w-full flex justify-between items-end  font-bold prompt-regular">
-                        <div>{pic.name.slice(0, 6).concat("..")}</div>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => {
+                            navigate("/profile/" + pic.user_id);
+                          }}
+                        >
+                          {pic.name.length > 6
+                            ? pic.name.slice(0, 6).concat("..")
+                            : pic.name}
+                        </div>
                         <div>{pic.totalScore}</div>
                       </div>
                     </div>
