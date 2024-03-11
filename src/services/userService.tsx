@@ -3,6 +3,7 @@ import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
 import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
+import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 
 export const HOST = "http://localhost:3001";
 
@@ -62,6 +63,17 @@ export class UserService {
     const response = await axios.get(url);
     const pic: PictureGetResponse = response.data;
     return pic;
+  }
+  async getPicScoreByDate(id: number) {
+    const url = HOST + `/vote/date?id=${id}`;
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      const pics: PictureByDateGetResponse[] = response.data;
+      return pics;
+    }else{
+      return [];
+    }
+    
   }
   async addNewPic(uid:number,img:string) {
     const url = HOST + "/pic";

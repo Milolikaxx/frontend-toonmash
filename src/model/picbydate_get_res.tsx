@@ -1,6 +1,7 @@
 export interface PictureByDateGetResponse {
     pid:        number;
-    img:        string;
+    scoreWin:   number;
+    scoreLose:  number;
     totalScore: number;
     date:       string;
 }
