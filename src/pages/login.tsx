@@ -20,15 +20,15 @@ function LoginPage() {
         </div>
         <div className="flex md:w-3/5 justify-center  ">
           <div className="w-[400px] h-[400px] bg-white rounded-2xl shadow-2xl justify-start  flex flex-col">
-            <label className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5">
+            <div className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5">
               TOONMASH
-            </label>
-            <label className="text-black font-bold text-2xl prompt-regular ml-10 mt-5">
+            </div>
+            <div className="text-black font-bold text-2xl prompt-regular ml-10 mt-5">
               Sign in
-            </label>
-            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
+            </div>
+            <div className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Username
-            </label>
+            </div>
             <TextField
               size="small"
               inputRef={inputUsername}
@@ -42,9 +42,9 @@ function LoginPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
+            <div className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Password
-            </label>
+            </div>
             <TextField
               size="small"
               type="password"
@@ -57,9 +57,9 @@ function LoginPage() {
                 },
               }}
             />
-            <label className="text-base  text-start text-red-600 ml-10 mt-2">
+            <div className="text-base  text-start text-red-600 ml-10 mt-2">
               {msg}
-            </label>
+            </div>
             <div className="flex flex-row justify-center">
               <button
                 onClick={() => {
@@ -79,9 +79,9 @@ function LoginPage() {
               </button>
             </div>
             <div className="flex flex-row justify-center">
-              <label className="text-black  text-sm font-light   prompt-regular  mt-5">
+              <div className="text-black  text-sm font-light   prompt-regular  mt-5">
                 I don’t have an account ?
-              </label>
+              </div>
               <a
                 className="text-violet-600 text-sm font-normal prompt-regular ml-2 mt-5 cursor-pointer"
                 onClick={() => {

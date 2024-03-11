@@ -33,6 +33,8 @@ function HomePage() {
               navigate("/homeadmin");
             }
           }
+        } else {
+          navigate("/");
         }
         loadNextImg();
       } catch (error) {
@@ -47,7 +49,7 @@ function HomePage() {
   return (
     <div className="h-screen w-screen flex justify-center items-center">
       {loading ? (
-        <CircularProgress/>
+        <CircularProgress />
       ) : p1 && p2 ? (
         <div className="w-3/5 flex flex-col items-center justify-start">
           <h1 className="mb-10 text-4xl text-black font-bold prompt-regular">
@@ -65,7 +67,11 @@ function HomePage() {
                   }
                 }}
               />
-              {user.current && <h4 className="text-xl text-black prompt-regular">{p1?.name}</h4>}
+              {user.current && (
+                <h4 className="text-xl text-black prompt-regular">
+                  {p1?.name}
+                </h4>
+              )}
               {p1?.totalScore && p1score ? (
                 <>
                   {p1score > 0 ? (
@@ -100,7 +106,11 @@ function HomePage() {
                   }
                 }}
               />
-              {user.current && <h4 className="text-xl text-black prompt-regular">{p2?.name}</h4>}
+              {user.current && (
+                <h4 className="text-xl text-black prompt-regular">
+                  {p2?.name}
+                </h4>
+              )}
               {p2?.totalScore && p2score ? (
                 <>
                   {p2score > 0 ? (

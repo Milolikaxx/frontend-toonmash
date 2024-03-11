@@ -17,19 +17,19 @@ function SignUpPage() {
           <img src="src\assets\image 4.png" alt="" />
         </div>
         <div className="flex md:w-3/5  flex-col justify-center items-center">
-          <label className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5 mb-10">
+          <div className="text-violet-500 text-3xl text-center uppercase potta-one-regular mt-5 mb-10">
             TOONMASH
-          </label>
+          </div>
           <div className="w-2/5 bg-white  flex flex-col rounded-3xl ">
-            <label className="text-black font-bold text-3xl prompt-reg rounded-xl shadow-2xl   mt-5 text-center">
+            <div className="text-black font-bold text-3xl prompt-reg rounded-xl shadow-2xl   mt-5 text-center">
               Sign Up
-            </label>
+            </div>
             <div className="mt-5 flex flex-row justify-center">
               <Avatar sx={{ width: 100, height: 100 }} src=""></Avatar>
             </div>
-            <label className="text-black  text-sm font-light prompt-regular ml-10 mt-5">
+            <div className="text-black  text-sm font-light prompt-regular ml-10 mt-5">
               Username
-            </label>
+            </div>
             <TextField
               size="small"
               // inputRef={input}
@@ -46,9 +46,9 @@ function SignUpPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
+            <div className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Name
-            </label>
+            </div>
             <TextField
               size="small"
               // inputRef={input}
@@ -63,9 +63,9 @@ function SignUpPage() {
                 },
               }}
             />
-            <label className="text-black text-sm font-light  prompt-regular ml-10 mt-5">
+            <div className="text-black text-sm font-light  prompt-regular ml-10 mt-5">
               Password
-            </label>
+            </div>
             <TextField
               size="small"
               // inputRef={input}
@@ -80,9 +80,9 @@ function SignUpPage() {
                 },
               }}
             />
-            <label className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
+            <div className="text-black  text-sm font-light  prompt-regular ml-10 mt-5">
               Comfirm Password
-            </label>
+            </div>
             <TextField
               size="small"
               // inputRef={input}
@@ -112,9 +112,9 @@ function SignUpPage() {
               </Button>
             </div>
             <div className="flex flex-row justify-center mb-5">
-              <label className="text-black  text-sm font-light  prompt-regular  mt-5">
+              <div className="text-black  text-sm font-light  prompt-regular  mt-5">
                 I have an account ?
-              </label>
+              </div>
               <a
                 className="text-violet-500  text-sm font-normal  prompt-regular ml-2 mt-5 cursor-pointer"
                 onClick={() => {
