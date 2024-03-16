@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PictureGetResponse } from "../model/pic_get_res";
-import { UserService } from "../services/userService";
+import { Service } from "../services/Service";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 
 function LeaderboardPage() {
   const userService = useMemo(() => {
-    return new UserService();
+    return new Service();
   }, []);
   const [loading, setLoading] = useState(true);
   const pics = useRef<PictureGetResponse[]>([]);
