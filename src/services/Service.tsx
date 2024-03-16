@@ -3,13 +3,12 @@ import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
 import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
-import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 
 // export const HOST = "http://localhost:3001";
 export const HOST = "https://backend-toonmash-1.onrender.com";
 
-export class UserService {
-  // user = useRef<UserGetPostResponse | undefined>(undefined);
+export class Service {
+  //authen
   async login(username: string, name: string) {
     const url = HOST + "/user/login";
     const body = {
@@ -25,6 +24,7 @@ export class UserService {
       return null;
     }
   }
+  //user
   async getAllUser() {
     const url = HOST + "/user";
     const response = await axios.get(url);
@@ -47,6 +47,7 @@ export class UserService {
       return null;
     }
   }
+  //pic
   async getAllPic() {
     const url = HOST + "/pic";
     const response = await axios.get(url);
@@ -65,27 +66,32 @@ export class UserService {
     const pic: PictureGetResponse = response.data;
     return pic;
   }
-  async getPicScoreByDate(id: number) {
-    const url = HOST + `/vote/date?id=${id}`;
-    const response = await axios.get(url);
-    if (response.status == 200) {
-      const pics: PictureByDateGetResponse[] = response.data;
-      return pics;
-    }else{
-      return [];
-    }
-    
-  }
-  async addNewPic(uid:number,img:string) {
+  async addNewPic(uid: number, img: string) {
     const url = HOST + "/pic";
     const body = {
       user_id: uid,
-      img: img
+      img: img,
     };
     const response = await axios.post(url, body);
     const res: VotePostResponse = response.data;
     return res.affected_row;
   }
+  async delByID(id: number) {
+    const url = HOST + `/pic/${id}`;
+    const response = await axios.delete(url);
+    const pic: PictureGetResponse = response.data;
+    return pic;
+  }
+  async uploadPic(file: File) {
+    const url = HOST + "/upload";
+    const formData = new FormData();
+    formData.append("filename", file);
+    const response = await axios.post(url, formData);
+    const res: UploadPostResponse = response.data;
+    return res.url;
+  }
+
+  //vote
   async vote(
     winner: number,
     loser: number,
@@ -102,13 +108,5 @@ export class UserService {
     const response = await axios.post(url, body);
     const aff: VotePostResponse = response.data;
     return aff;
-  }
-  async uploadPic(file:File){
-    const url = HOST + "/upload";
-    const formData = new FormData();
-    formData.append("filename", file);
-    const response = await axios.post(url, formData);
-    const res: UploadPostResponse = response.data;
-    return res.url;
   }
 }

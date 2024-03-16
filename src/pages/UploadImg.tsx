@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { UserService } from "../services/userService";
+import { Service } from "../services/Service";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 function UploadImgPage() {
   const userService = useMemo(() => {
-    return new UserService();
+    return new Service();
   }, []);
   const navigate = useNavigate();
   const user = useRef<UserGetPostResponse | undefined>(undefined);

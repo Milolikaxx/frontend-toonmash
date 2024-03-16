@@ -11,7 +11,7 @@ import { TabPanel } from "@mui/lab";
 
 function ChartPage() {
   const userService = useMemo(() => {
-    return new UserService();
+    return new Service();
   }, []);
   const pic = useRef<PictureGetResponse>();
   const htrScore = useRef<PictureByDateGetResponse[]>([]);
