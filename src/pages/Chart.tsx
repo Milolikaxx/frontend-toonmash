@@ -1,7 +1,7 @@
 import { BarChart, LineChart } from "@mui/x-charts";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { UserService } from "../services/userService";
+import { Service } from "../services/Service";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 import { CircularProgress, IconButton, Tab, Tabs } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
@@ -10,7 +10,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { TabPanel } from "@mui/lab";
 
 function ChartPage() {
-  const userService = useMemo(() => {
+  const service = useMemo(() => {
     return new Service();
   }, []);
   const pic = useRef<PictureGetResponse>();
@@ -31,9 +31,9 @@ function ChartPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resPic = await userService.getPicByID(+id!);
+        const resPic = await service.getPicByID(+id!);
         pic.current = resPic;
-        const resHtr = await userService.getPicScoreByDate(+id!);
+        const resHtr = await service.getPicScoreByDate(+id!);
         htrScore.current = resHtr;
 
         const currentDate = new Date();
@@ -79,7 +79,7 @@ function ChartPage() {
       }
     };
     loadData();
-  }, [id, userService]);
+  }, [id, service]);
   return (
     <div className="h-screen w-screen flex justify-center items-center">
       {loading ? (
