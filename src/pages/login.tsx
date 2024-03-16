@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserService } from "../services/userService";
+import { Service } from "../services/Service";
 import { TextField } from "@mui/material";
 
 function LoginPage() {
   const navigate = useNavigate();
   const inputUsername = useRef<HTMLInputElement>();
   const inputPass = useRef<HTMLInputElement>();
-  const userService = new UserService();
+  const userService = new Service();
   const [msg, setMsg] = useState("");
   function navigateToSignUp() {
     navigate("/signup");

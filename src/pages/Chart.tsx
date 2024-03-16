@@ -1,11 +1,11 @@
 import { BarChart } from "@mui/x-charts";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UserService } from "../services/userService";
+import { Service } from "../services/Service";
 
 function ChartPage() {
   const userService = useMemo(() => {
-    return new UserService();
+    return new Service();
   }, []);
   const pic = useRef<UserGetPostResponse>();
   const [dateList, setDateList] = useState<string[]>([]);

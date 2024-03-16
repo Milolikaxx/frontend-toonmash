@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { UserGetPostResponse } from "../../model/response/user_getpost_response";
-import { UserService } from "../../services/userService";
+import { Service } from "../../services/Service";
 import CircularProgress from "@mui/material/CircularProgress";
 import styled from "@emotion/styled";
 import { Pagination } from "@mui/material";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function HomeAdmin() {
   const navigate = useNavigate();
   const userService = useMemo(() => {
-    return new UserService();
+    return new Service();
   }, []);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
