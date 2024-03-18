@@ -67,9 +67,7 @@ function ChartPage() {
           
           if (!totalScores.slice(-1)[0]) {
             totalScores.push(
-              score
-                ? pic.current.totalScore + score.totalScore
-                : pic.current.totalScore
+              pic.current.totalScore
             );
             console.log(score?.totalScore ? score.totalScore : pic.current.totalScore);
           } else {
