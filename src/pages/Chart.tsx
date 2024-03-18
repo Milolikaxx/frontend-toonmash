@@ -7,6 +7,9 @@ import { CircularProgress, IconButton, Tab, Tabs } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import { PictureGetResponse } from "../model/pic_get_res";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { TabPanel } from "@mui/lab";
 
 function ChartPage() {
@@ -24,7 +27,7 @@ function ChartPage() {
   const navigate = useNavigate();
   const [value, setValue] = useState("1");
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
@@ -49,9 +52,9 @@ function ChartPage() {
         const lScores: number[] = [];
         // ลูป 6 วันก่อนถึงวันนี้
         for (
-          let date = daysAgo;
-          date <= currentDate;
-          date.setDate(date.getDate() + 1)
+          let date = currentDate;
+          date >= daysAgo;
+          date.setDate(date.getDate() - 1)
         ) {
           dates.push(formatDate(new Date(date)));
           const score = htrScore.current.find(
@@ -60,14 +63,30 @@ function ChartPage() {
           );
           wScores.push(score ? score.scoreWin : 0);
           lScores.push(score ? Math.abs(score.scoreLose) : 0);
-          totalScores.push(
-            score
-              ? 1000 + score.totalScore
-              : totalScores.slice(-1)[0]
-              ? totalScores.slice(-1)[0]
-              : 1000
-          );
+          
+          
+          if (!totalScores.slice(-1)[0]) {
+            totalScores.push(
+              score
+                ? pic.current.totalScore + score.totalScore
+                : pic.current.totalScore
+            );
+            console.log(score?.totalScore ? score.totalScore : pic.current.totalScore);
+          } else {
+            totalScores.push(
+              score
+                ? totalScores.slice(-1)[0] + score.totalScore
+                : 1000
+            );
+            // console.log(
+            //   score
+            //   ? totalScores.slice(-1)[0] + score.totalScore
+            //   : 1000)
+            
+          }
+          
         }
+        // console.log(totalScores);
         setDateList(dates);
         setScoreWinList(wScores);
         setScoreLoseList(lScores);
@@ -85,13 +104,41 @@ function ChartPage() {
       {loading ? (
         <CircularProgress />
       ) : (
-        <div className="h-full w-full px-10 lg:px-44 flex flex-col justify-center items-start">
-          <IconButton className="mb-4" onClick={() => navigate(-1)}>
-            <ArrowBackRoundedIcon sx={{ fontSize: 35 }} className="" />
-          </IconButton>
+        <div className="h-full w-full pt-10 px-10 lg:px-44 flex flex-col justify-center items-start">
+          <div className="w-full flex items-start">
+            <IconButton className="mb-4" onClick={() => navigate(-1)}>
+              <ArrowBackRoundedIcon sx={{ fontSize: 35 }} />
+            </IconButton>
+            <div className="ms-5 mt-2 flex flex-col prompt-regular text-lg">
+              <div className="flex items-center gap-3">
+                <div className="font-bold text-violet-700">Total score</div>
+                <div className="text-gray-600">{pic.current?.totalScore}</div>
+                {pic.current!.totalScore - totalScoreList.slice(-1)[0]}
+                <ArrowDropUpIcon
+                  className="text-green-600"
+                  sx={{ fontSize: 35 }}
+                />
+                <ArrowDropDownIcon
+                  className="text-red-600"
+                  sx={{ fontSize: 35 }}
+                />
+                <HorizontalRuleIcon
+                  className="text-gray-500"
+                  sx={{ fontSize: 35 }}
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <div className="font-bold text-violet-700">Created At</div>
+                <div className="text-gray-600">
+                  {formatDate(new Date(pic.current!.created_at))}
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="w-full mt-96 lg:mt-0 grid grid-cols-10 gap-4">
-            <div className="col-span-full lg:col-span-4 grid grid-rows-12 grid-flow-col max-h-[550px]">
+            <div className="col-span-full lg:col-span-4 grid grid-rows-12 grid-flow-col max-h-[500px]">
               <div className="row-span-full">
                 <img
                   src={pic.current!.img}
@@ -99,7 +146,7 @@ function ChartPage() {
                 />
               </div>
             </div>
-            <div className="col-span-full lg:col-span-6 max-h-[520px]">
+            <div className="col-span-full lg:col-span-6 max-h-[480px]">
               <TabContext value={value}>
                 <Tabs
                   value={value}

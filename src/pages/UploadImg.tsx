@@ -4,8 +4,9 @@ import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import secureLocalStorage from "react-secure-storage";
 function UploadImgPage() {
-  const userService = useMemo(() => {
+  const service = useMemo(() => {
     return new Service();
   }, []);
   const navigate = useNavigate();
@@ -27,9 +28,9 @@ function UploadImgPage() {
 
   useEffect(() => {
     const loadData = async () => {
-      const userStr = localStorage.getItem("user");
+      const userStr = secureLocalStorage.getItem("user");
       if (userStr) {
-        user.current = JSON.parse(userStr);
+        user.current = JSON.parse(userStr.toString());
       } else {
         navigate("/");
       }
@@ -49,11 +50,11 @@ function UploadImgPage() {
   async function uploadFile() {
     let url = "";
     if (image) {
-      url = await userService.uploadPic(image);
+      url = await service.uploadPic(image);
     } else {
       url = imageUrl!;
     }
-    const aff = await userService.addNewPic(user.current!.uid, url);
+    const aff = await service.addNewPic(user.current!.uid, url);
     if (aff == 1) {
       navigate("/profile/" + user.current!.uid);
     }
@@ -70,7 +71,7 @@ function UploadImgPage() {
         />
         <h1 className="ps-6 mb-3 font-sans text-4xl font-bold text-gray-900">
           Post your cartoon picture
-        </h1>{" "}
+        </h1>
       </div>
 
       {imageUrl == null ? (
@@ -84,6 +85,7 @@ function UploadImgPage() {
           <input
             id="file"
             type="file"
+            accept="image/*"
             onChange={onImageChange}
             style={{ display: "none" }}
           />
@@ -102,6 +104,7 @@ function UploadImgPage() {
             <input
               id="file"
               type="file"
+              accept="image/*"
               onChange={onImageChange}
               style={{ display: "none" }}
             />
