@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 
 function Header() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Header() {
     setMenu(null);
   };
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")!));
+    setUser(JSON.parse(secureLocalStorage.getItem("user")!.toString()));
   }, []);
 
   function navigateToHome() {
@@ -124,7 +125,7 @@ function Header() {
   );
   function logout() {
     if (user) {
-      localStorage.removeItem("user");
+      secureLocalStorage.removeItem("user");
       setUser(undefined);
       navigate("/");
     }

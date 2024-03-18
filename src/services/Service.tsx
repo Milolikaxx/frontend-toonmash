@@ -5,16 +5,16 @@ import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 
-// export const HOST = "http://localhost:3001";
-export const HOST = "https://backend-toonmash-1.onrender.com";
+export const HOST = "http://localhost:3001";
+// export const HOST = "https://backend-toonmash-1.onrender.com";
 
 export class Service {
   //authen
-  async login(username: string, name: string) {
+  async login(username: string, pwd: string) {
     const url = HOST + "/user/login";
     const body = {
       username: username,
-      password: name,
+      password: pwd,
     };
     const response = await axios.post(url, body);
     if (response.status == 200) {
@@ -26,6 +26,46 @@ export class Service {
     }
   }
   //user
+  async register(username: string, name: string, pwd: string, img: string) {
+    const url = HOST + "/user";
+    const body = {
+      username: username,
+      name: name,
+      password: pwd,
+      img: img,
+      type: 0
+    };
+    const response = await axios.post(url, body);
+    if (response.status == 201) {
+      const user: UserGetPostResponse = response.data;
+      return user;
+    } else {
+      console.log("login faild");
+      return null;
+    }
+  }
+  async saveEdit(id:number,username: string, name: string, pwd: string, img: string) {
+    const url = HOST + "/user/"+id;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body:any = {
+      username: username,
+      name: name,
+    }
+    if (pwd != "") {
+      body.password = pwd
+    }
+    if (img != "") {
+      body.img = img
+    }
+    console.log(body);
+    const response = await axios.put(url, body);
+    if (response.status == 201) {
+      return 1;
+    } else {
+      console.log("edit failed");
+      return 0;
+    }
+  }
   async getAllUser() {
     const url = HOST + "/user";
     const response = await axios.get(url);

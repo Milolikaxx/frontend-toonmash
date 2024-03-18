@@ -4,6 +4,7 @@ import { Service } from "../services/Service";
 import { useNavigate } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { CircularProgress } from "@mui/material";
+import secureLocalStorage from "react-secure-storage";
 function HomePage() {
   const userService = useMemo(() => {
     return new Service();
@@ -23,9 +24,10 @@ function HomePage() {
         const res = await userService.getAllPic();
         const imgs = shuffleImages(res);
         pics.current = imgs;
-        const userStr = localStorage.getItem("user");
+        const userStr = secureLocalStorage.getItem("user");
+        // const userStr = localStorage.getItem("user");
         if (userStr) {
-          user.current = JSON.parse(userStr);
+          user.current = JSON.parse(userStr.toString());          
           if (user.current) {
             if (user.current.type == 0) {
               navigate("/");

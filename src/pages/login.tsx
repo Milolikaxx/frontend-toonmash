@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Service } from "../services/Service";
 import { TextField } from "@mui/material";
+import secureLocalStorage from "react-secure-storage";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -98,13 +99,13 @@ function LoginPage() {
     </>
   );
   async function btnLogin(username: string, password: string) {
-    const res = await userService.login(username, password);
-    console.log(res);
-    if (res == null) {
+    const user = await userService.login(username, password);
+    if (user == null) {
       setMsg("Invalid username or password");
       console.log("Invalid username or password");
     } else {
-      localStorage.setItem("user", JSON.stringify(res));
+      // localStorage.setItem("user", JSON.stringify(user));
+      secureLocalStorage.setItem("user", JSON.stringify(user));
       navigate("/");
     }
   }

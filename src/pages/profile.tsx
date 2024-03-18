@@ -8,8 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
 import AddIcon from "@mui/icons-material/Add";
+import secureLocalStorage from "react-secure-storage";
 function ProfilePage() {
-  const a = [11,22,33,55,66];
   const { id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -35,9 +35,9 @@ function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userStr = localStorage.getItem("user");
+        const userStr = secureLocalStorage.getItem("user");
         if (userStr) {
-          const user: UserGetPostResponse = JSON.parse(userStr);
+          const user: UserGetPostResponse = JSON.parse(userStr.toString());
           let uid = 0;
           if (user.uid == +id!) {
             data.current = user;
@@ -91,7 +91,7 @@ function ProfilePage() {
                         navigate(`/editprofile/` + data.current?.uid);
                       }}
                       type="button"
-                      className="flex whitespace-nowrap  text-white bg-pink-400 rounded-2xl  hover:ring-4 hover:ring-pink-200 text-sm px-5 py-2.5 text-center me-2 mb-2"
+                      className="flex whitespace-nowrap  text-white bg-pink-400 transition rounded-2xl  hover:ring-4 hover:ring-pink-200 text-sm px-5 py-2.5 text-center me-2 mb-2"
                     >
                       แก้ไข้โปรไฟล์ของฉัน
                     </button>
@@ -100,10 +100,10 @@ function ProfilePage() {
               </div>
             ) : null}
             <hr className="h-px my-3 bg-gray-400"></hr>
-            <div className="grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-3">
+            <div className="pb-2 grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-3">
               {pics.length > 0 ? (
-                pics.map((p,idx) => (
-                  <article key={"p-" + p.pid}>
+                pics.map(p => (
+                  <article className="shadow-md rounded-b-md" key={"p-" + p.pid}>
                     <div className="aspect-square">
                       <div className="w-full overflow-hidden rounded-t-2xl">
                         <img
@@ -115,13 +115,13 @@ function ProfilePage() {
                           }}
                         />
                       </div>
-                      <div className=" flex  justify-between  border-red-300 border-2">
+                      <div className=" flex  justify-between">
                         <div className="flex flex-row justify-center items-center">
                           <IconButton>
                             <FavoriteIcon sx={{ color: "#E966A0" }} />
                           </IconButton>
                           <div className=" text-black text-xl  text-center">
-                            {p.totalScore} {p.pid}
+                            {p.totalScore}
                           </div>
                         </div>
                         {own && (
@@ -141,7 +141,7 @@ function ProfilePage() {
                                   setAnchorEl(null);
                                 }}
                               >
-                                ลบ {a[idx]}
+                                ลบ
                               </MenuItem>
 
                               <MenuItem onClick={handleClose}>

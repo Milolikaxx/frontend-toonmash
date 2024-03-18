@@ -24,6 +24,12 @@
   margin-top: 180px;
   z-index: 100;
 }
+.addPic {
+  position: absolute;
+  margin-left: 70px;
+  margin-top: 70px;
+  z-index: 100;
+}
 
 a:hover {
   text-decoration: underline;
