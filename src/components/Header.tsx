@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Avatar, Menu, MenuItem } from "@mui/material";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ function Header() {
   const navigate = useNavigate();
   const [selectMenu, setMenu] = React.useState<null | HTMLElement>(null);
   const open = Boolean(selectMenu);
-  const [user, setUser] = useState<UserGetPostResponse>();
+  const user = useRef<UserGetPostResponse | undefined>(undefined);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setMenu(event.currentTarget);
   };
@@ -18,7 +18,10 @@ function Header() {
     setMenu(null);
   };
   useEffect(() => {
-    setUser(JSON.parse(secureLocalStorage.getItem("user")!.toString()));
+    const userStr = secureLocalStorage.getItem("user");
+        if (userStr) {
+          user.current = JSON.parse(userStr.toString()); 
+        }
   }, []);
 
   function navigateToHome() {
@@ -56,15 +59,15 @@ function Header() {
             Leaderboard
           </button>
 
-          {user?.type == 0 ? (
+          {user.current?.type == 0 ? (
             <>
               <button
                 onClick={handleClick}
                 type="button"
                 className="flex whitespace-nowrap  text-white   text-sm text-center justify-center items-center"
               >
-                <Avatar src={user.img} />
-                <h1 className="ml-2">{user.name}</h1>
+                <Avatar src={user.current.img} />
+                <h1 className="ml-2">{user.current.name}</h1>
                 <ArrowDropDownIcon />
               </button>
               <Menu
@@ -75,7 +78,7 @@ function Header() {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate("/profile/" + user.uid);
+                    navigate("/profile/" + user.current?.uid);
                   }}
                 >
                   โปรไฟล์ของฉัน
@@ -83,15 +86,15 @@ function Header() {
                 <MenuItem onClick={logout}>ออกจากระบบ</MenuItem>
               </Menu>
             </>
-          ) : user?.type == 1 ? (
+          ) : user.current?.type == 1 ? (
             <>
               <button
                 onClick={handleClick}
                 type="button"
                 className="flex whitespace-nowrap  text-white   text-sm text-center justify-center items-center"
               >
-                <Avatar src={user.img} />
-                <h1 className="ml-2">{user.name}</h1>
+                <Avatar src={user.current.img} />
+                <h1 className="ml-2">{user.current.name}</h1>
                 <ArrowDropDownIcon />
               </button>
               <Menu
@@ -102,7 +105,7 @@ function Header() {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate("/editprofile/" + user.uid);
+                    navigate("/editprofile/" + user.current?.uid);
                   }}
                 >
                   แก้ไขโปรไฟล์ของฉัน
@@ -126,7 +129,7 @@ function Header() {
   function logout() {
     if (user) {
       secureLocalStorage.removeItem("user");
-      setUser(undefined);
+      user.current = undefined
       navigate("/");
     }
   }
