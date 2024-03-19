@@ -11,12 +11,14 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { TabPanel } from "@mui/lab";
+import { ScoreDateAgosGetResponse } from "../model/scoreagos_get_res";
 
 function ChartPage() {
   const service = useMemo(() => {
     return new Service();
   }, []);
   const pic = useRef<PictureGetResponse>();
+  const diffScore = useRef(0);
   const htrScore = useRef<PictureByDateGetResponse[]>([]);
   const [dateList, setDateList] = useState<string[]>([]);
   const [totalScoreList, setTotalScoreList] = useState<number[]>([]);
@@ -38,7 +40,8 @@ function ChartPage() {
         pic.current = resPic;
         const resHtr = await service.getPicScoreByDate(+id!);
         htrScore.current = resHtr;
-
+        const resScore7Agos = await service.getPicScore7DateAgos(+id!);
+        const score7Agos: ScoreDateAgosGetResponse = resScore7Agos!;
         const currentDate = new Date();
         const daysAgo = new Date();
         daysAgo.setDate(currentDate.getDate() - 6);
@@ -52,9 +55,9 @@ function ChartPage() {
         const lScores: number[] = [];
         // ลูป 6 วันก่อนถึงวันนี้
         for (
-          let date = currentDate;
-          date >= daysAgo;
-          date.setDate(date.getDate() - 1)
+          let date = daysAgo;
+          date <= currentDate;
+          date.setDate(date.getDate() + 1)
         ) {
           dates.push(formatDate(new Date(date)));
           const score = htrScore.current.find(
@@ -63,32 +66,30 @@ function ChartPage() {
           );
           wScores.push(score ? score.scoreWin : 0);
           lScores.push(score ? Math.abs(score.scoreLose) : 0);
-          
-          
-          if (!totalScores.slice(-1)[0]) {
+
+          if (score) {
             totalScores.push(
-              pic.current.totalScore
-            );
-            console.log(score?.totalScore ? score.totalScore : pic.current.totalScore);
-          } else {
-            totalScores.push(
-              score
+              totalScores.slice(-1)[0]
                 ? totalScores.slice(-1)[0] + score.totalScore
+                : score7Agos
+                ? score7Agos.totalScore + score.totalScore
                 : 1000
             );
-            // console.log(
-            //   score
-            //   ? totalScores.slice(-1)[0] + score.totalScore
-            //   : 1000)
-            
+          } else {
+            totalScores.push(
+              totalScores.slice(-1)[0]
+                ? totalScores.slice(-1)[0]
+                : score7Agos
+                ? score7Agos.totalScore
+                : 1000
+            );
           }
-          
         }
-        // console.log(totalScores);
         setDateList(dates);
         setScoreWinList(wScores);
         setScoreLoseList(lScores);
         setTotalScoreList(totalScores);
+        diffScore.current = totalScores!.slice(-1)[0] - totalScores!.slice(-2)[0];
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -98,7 +99,7 @@ function ChartPage() {
     loadData();
   }, [id, service]);
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
+    <div className="h-screen w-screen fxcenter">
       {loading ? (
         <CircularProgress />
       ) : (
@@ -111,19 +112,30 @@ function ChartPage() {
               <div className="flex items-center gap-3">
                 <div className="font-bold text-violet-700">Total score</div>
                 <div className="text-gray-600">{pic.current?.totalScore}</div>
-                {pic.current!.totalScore - totalScoreList.slice(-1)[0]}
-                <ArrowDropUpIcon
-                  className="text-green-600"
-                  sx={{ fontSize: 35 }}
-                />
-                <ArrowDropDownIcon
-                  className="text-red-600"
-                  sx={{ fontSize: 35 }}
-                />
-                <HorizontalRuleIcon
-                  className="text-gray-500"
-                  sx={{ fontSize: 35 }}
-                />
+                {totalScoreList!.slice(-1)[0] > totalScoreList!.slice(-2)[0] ? (
+                  <div className="text-green-600 fxcenter gap-2">
+                    <div className="bg-green-600 text-white w-6 h-6 fxcenter rounded-lg">
+                      <ArrowDropUpIcon sx={{ fontSize: 35 }} />
+                    </div>
+
+                    {diffScore.current}
+                  </div>
+                ) : totalScoreList!.slice(-1)[0] < totalScoreList!.slice(-2)[0] ? (
+                  <div className="text-red-600 fxcenter gap-2">
+                    <div className="bg-red-600 text-white w-6 h-6 fxcenter rounded-lg">
+                      <ArrowDropDownIcon sx={{ fontSize: 35 }} />
+                    </div>
+
+                    {diffScore.current}
+                  </div>
+                ) : (
+                  <div className="text-gray-500 fxcenter gap-2">
+                    <div className="bg-gray-500 text-white w-6 h-6 fxcenter rounded-lg">
+                      <HorizontalRuleIcon sx={{ fontSize: 20 }} />
+                    </div>
+                    {diffScore.current}
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-3">

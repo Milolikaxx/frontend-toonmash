@@ -5,8 +5,8 @@ import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 
-export const HOST = "http://localhost:3001";
-// export const HOST = "https://backend-toonmash-1.onrender.com";
+// export const HOST = "http://localhost:3001";
+export const HOST = "https://backend-toonmash-1.onrender.com";
 
 export class Service {
   //authen
@@ -116,7 +116,16 @@ export class Service {
     }else{
       return [];
     }
-    
+  }
+  async getPicScore7DateAgos(id: number) {
+    const url = HOST + `/vote/totalagos?id=${id}`;
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      const pic: PictureByDateGetResponse = response.data;
+      return pic;
+    }else{
+      return null;
+    }
   }
   async addNewPic(uid: number, img: string) {
     const url = HOST + "/pic";
