@@ -67,10 +67,10 @@ function ChangeImgPage() {
     } else {
       url = imageUrl!;
     }
-    const aff = await service.addNewPic(user.current!.uid, url);
-    if (aff == 1) {
-      navigate("/profile/" + user.current!.uid);
-    }
+     await service.changePic(pic.current!.pid, url);
+   
+    navigate("/profile/" + user.current!.uid);
+    
   }
   return (
      loading ? (
