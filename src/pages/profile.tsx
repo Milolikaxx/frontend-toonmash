@@ -17,6 +17,7 @@ function ProfilePage() {
   const service = useMemo(() => {
     return new Service();
   }, []);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const IsolatedMenu = (props : any) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
