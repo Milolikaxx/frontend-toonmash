@@ -5,8 +5,8 @@ import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 
-export const HOST = "http://localhost:3001";
-// export const HOST = "https://backend-toonmash-1.onrender.com";
+// export const HOST = "http://localhost:3001";
+export const HOST = "https://backend-toonmash-1.onrender.com";
 
 export class Service {
   //authen

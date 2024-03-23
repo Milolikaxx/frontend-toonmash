@@ -12,6 +12,7 @@ import EditPage from "./pages/editProfile";
 import LeaderboardPage from "./pages/Leaderboard";
 import UploadImgPage from "./pages/UploadImg";
 import ChartPage from "./pages/Chart";
+import ChangeImgPage from "./pages/ChangeImg";
 const routers = createBrowserRouter([
   {
     path: "",
@@ -24,6 +25,7 @@ const routers = createBrowserRouter([
       { path: "/chart/:id", element: <ChartPage /> },
       { path: "/homeadmin", element: <HomeAdmin /> },
       { path: "/editProfile/:id", element: <EditPage /> },
+      { path: "/change/:id", element: <ChangeImgPage /> },
     ],
     errorElement: <ErrorPage />,
   },

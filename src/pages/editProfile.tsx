@@ -90,7 +90,7 @@ function EditPage() {
               />
             </div>
             <div className="flex flex-col justify-center items-center">
-            <Avatar
+                <Avatar
                   sx={{ width: 100, height: 100 }}
                   src={imageUrl}
                 />
