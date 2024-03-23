@@ -5,6 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import styled from "@emotion/styled";
 import { Pagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 
 function HomeAdmin() {
   const navigate = useNavigate();
@@ -23,9 +24,9 @@ function HomeAdmin() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userStr = localStorage.getItem("user");
+        const userStr = secureLocalStorage.getItem("user");
         if (userStr) {
-          user.current = JSON.parse(userStr);
+          user.current = JSON.parse(userStr.toString());
         } else {
           navigate("/");
         }

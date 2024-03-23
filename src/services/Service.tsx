@@ -92,8 +92,22 @@ export class Service {
   async getAllPic() {
     const url = HOST + "/pic";
     const response = await axios.get(url);
-    const pics: PictureGetResponse[] = response.data;
-    return pics;
+    if (response.status == 200) {
+      const pics: PictureGetResponse[] = response.data;
+      return pics;
+    }else{
+      return [];
+    }
+  }
+  async getPicRankDayAgo() {
+    const url = HOST + "/pic/totalago";
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      const pics: PictureGetResponse[] = response.data;
+      return pics;
+    }else{
+      return [];
+    }
   }
   async getPicByUID(uid: number) {
     const url = HOST + `/pic?uid=${uid}`;
@@ -134,6 +148,15 @@ export class Service {
       img: img,
     };
     const response = await axios.post(url, body);
+    const res: VotePostResponse = response.data;
+    return res.affected_row;
+  }
+  async changePic(id: number, img: string) {
+    const url = HOST + `/pic/${id}`;
+    const body = {
+      img: img,
+    };
+    const response = await axios.put(url, body);
     const res: VotePostResponse = response.data;
     return res.affected_row;
   }
