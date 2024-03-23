@@ -116,7 +116,16 @@ export class Service {
     }else{
       return [];
     }
-    
+  }
+  async getPicScore7DateAgos(id: number) {
+    const url = HOST + `/vote/totalagos?id=${id}`;
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      const pic: PictureByDateGetResponse = response.data;
+      return pic;
+    }else{
+      return null;
+    }
   }
   async addNewPic(uid: number, img: string) {
     const url = HOST + "/pic";
