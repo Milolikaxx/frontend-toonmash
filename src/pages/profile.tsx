@@ -11,19 +11,86 @@ import AddIcon from "@mui/icons-material/Add";
 import secureLocalStorage from "react-secure-storage";
 function ProfilePage() {
   const { id } = useParams();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+
   const navigate = useNavigate();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const service = useMemo(() => {
     return new Service();
   }, []);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const IsolatedMenu = (props : any) => {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    return (
+      <>
+        {own && (
+          <>
+            <IconButton onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem
+                onClick={() => {
+                  delPic(props.id);
+                  setAnchorEl(null);
+                }}
+              >
+                ลบ
+              </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  navigate(`/change/` + props.id);
+                }}
+              >
+                เปลี่ยนรูป
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/chart/` + props.id);
+                }}
+              >
+                ดูประวัติคะแนน
+              </MenuItem>
+            </Menu>
+          </>
+        )}
+        {isAdmin && (
+          <>
+            <IconButton onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem
+                onClick={() => {
+                  delPic(props.id);
+                  setAnchorEl(null);
+                }}
+              >
+                ลบ
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/chart/` + props.id);
+                }}
+              >
+                ดูประวัติคะแนน
+              </MenuItem>
+            </Menu>
+          </>
+        )}
+      </>
+    );
+  };
 
   const data = useRef<UserGetPostResponse>();
   // const pics = useRef<PictureGetResponse[]>([]);
@@ -102,8 +169,11 @@ function ProfilePage() {
             <hr className="h-px my-3 bg-gray-400"></hr>
             <div className="pb-2 grid sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-4 lg:grid-col-3 lg:gap-4 xl:grid-cols-3 xl:gap-4 min-[1900px]:grid-cols-4  min-[1900px]:gap-3">
               {pics.length > 0 ? (
-                pics.map(p => (
-                  <article className="shadow-md rounded-b-md" key={"p-" + p.pid}>
+                pics.map((p) => (
+                  <article
+                    className="shadow-md rounded-b-md"
+                    key={"p-" + p.pid}
+                  >
                     <div className="aspect-square">
                       <div className="w-full overflow-hidden rounded-t-2xl">
                         <img
@@ -124,55 +194,8 @@ function ProfilePage() {
                             {p.totalScore}
                           </div>
                         </div>
-                        {own && (
-                          <>
-                            <IconButton onClick={handleClick}>
-                              <MoreVertIcon /> 
-                            </IconButton>
-
-                            <Menu
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose}
-                            >
-                              <MenuItem
-                                onClick={() => {
-                                  delPic(p.pid);
-                                  setAnchorEl(null);
-                                }}
-                              >
-                                ลบ
-                              </MenuItem>
-
-                              <MenuItem onClick={handleClose}>
-                                เปลี่ยนรูป
-                              </MenuItem>
-                              <MenuItem onClick={handleClose}>
-                                ดูประวัติคะแนน
-                              </MenuItem>
-                            </Menu>
-                          </>
-                        )}
-                        {isAdmin && (
-                          <>
-                            <IconButton onClick={handleClick}>
-                              <MoreVertIcon /> {p.pid}
-                            </IconButton>
-
-                            <Menu
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose}
-                            >
-                              <MenuItem onClick={handleClose}>
-                                ลบ {p.pid}
-                              </MenuItem>
-                              <MenuItem onClick={handleClose}>
-                                ดูประวัติคะแนน
-                              </MenuItem>
-                            </Menu>
-                          </>
-                        )}
+                        <IsolatedMenu id={p.pid}/>
+                       
                       </div>
                     </div>
                   </article>
