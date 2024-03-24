@@ -1,4 +1,4 @@
-import { BarChart, LineChart } from "@mui/x-charts";
+import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Service } from "../services/Service";
@@ -12,6 +12,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { TabPanel } from "@mui/lab";
 import { ScoreDateAgosGetResponse } from "../model/scoreagos_get_res";
+import { VoteCountGetResponse } from "../model/votecount_get_res";
 
 function ChartPage() {
   const service = useMemo(() => {
@@ -20,6 +21,7 @@ function ChartPage() {
   const pic = useRef<PictureGetResponse>();
   const diffScore = useRef(0);
   const htrScore = useRef<PictureByDateGetResponse[]>([]);
+  const picOverall = useRef<VoteCountGetResponse | undefined>(undefined);
   const [dateList, setDateList] = useState<string[]>([]);
   const [totalScoreList, setTotalScoreList] = useState<number[]>([]);
   const [scoreWinList, setScoreWinList] = useState<number[]>([]);
@@ -40,6 +42,9 @@ function ChartPage() {
         pic.current = resPic;
         const resHtr = await service.getPicScoreByDate(+id!);
         htrScore.current = resHtr;
+        const pOverall = await service.getPicOverall(+id!);
+        picOverall.current = pOverall;
+        
         const resScore7Agos = await service.getPicScore7DateAgos(+id!);
         const score7Agos: ScoreDateAgosGetResponse = resScore7Agos!;
         const currentDate = new Date();
@@ -88,8 +93,10 @@ function ChartPage() {
         setDateList(dates);
         setScoreWinList(wScores);
         setScoreLoseList(lScores);
-        setTotalScoreList(totalScores);
-        diffScore.current = totalScores!.slice(-1)[0] - totalScores!.slice(-2)[0];
+        setTotalScoreList(totalScores.length > 1 ? totalScores : [1000+wScores[0]-lScores[0]]);
+        
+        diffScore.current =
+          totalScores!.slice(-1)[0] - totalScores!.slice(-2)[0];
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -120,7 +127,8 @@ function ChartPage() {
 
                     {diffScore.current}
                   </div>
-                ) : totalScoreList!.slice(-1)[0] < totalScoreList!.slice(-2)[0] ? (
+                ) : totalScoreList!.slice(-1)[0] <
+                  totalScoreList!.slice(-2)[0] ? (
                   <div className="text-red-600 fxcenter gap-2">
                     <div className="bg-red-600 text-white w-6 h-6 fxcenter rounded-lg">
                       <ArrowDropDownIcon sx={{ fontSize: 35 }} />
@@ -167,7 +175,7 @@ function ChartPage() {
                 >
                   <Tab value="1" label="Score" />
                   <Tab value="2" label="Total score" />
-                  <Tab value="3" label="Item Three" />
+                  <Tab value="3" label="Overall" />
                 </Tabs>
                 <TabPanel className="h-full" value="1">
                   <div className="text-xl prompt-regular text-center">
@@ -203,6 +211,45 @@ function ChartPage() {
                       },
                     ]}
                   />
+                </TabPanel>
+                <TabPanel className="h-full" value="3">
+                  <div className="text-xl prompt-regular text-center">
+                    Overall
+                  </div>
+                  {picOverall.current!.win > 0 ||
+                  picOverall.current!.lose > 0 ? (
+                    <PieChart
+                      series={[
+                        {
+                          data: [
+                            {
+                              id: 0,
+                              value: picOverall.current!.win,
+                              label: "Win",
+                              color: "#65B741",
+                            },
+                            {
+                              id: 1,
+                              value: picOverall.current!.lose,
+                              label: "Lose",
+                              color: "#FF6868",
+                            },
+                          ],
+                          highlightScope: {
+                            faded: "global",
+                            highlighted: "item",
+                          },
+                          faded: {
+                            innerRadius: 30,
+                            additionalRadius: -30,
+                            color: "gray",
+                          },
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <div className="text-lg prompt-regular text-center">This picture has not been voted yet.</div>
+                  )}
                 </TabPanel>
               </TabContext>
 

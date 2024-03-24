@@ -15,6 +15,14 @@ function HomePage() {
   // const [pics, setPics] = useState<PictureGetResponse[]>([]);
   const [p1, setP1] = useState<PictureGetResponse>();
   const [p2, setP2] = useState<PictureGetResponse>();
+  const [p1R, setP1R] = useState("");
+  const [p2R, setP2R] = useState("");
+  const [p1K, setP1K] = useState("");
+  const [p2K, setP2K] = useState("");
+  const [p1StrChc, setP1StrChc] = useState("");
+  const [p2StrChc, setP2StrChc] = useState("");
+  const [p1StrP, setP1StrP] = useState("");
+  const [p2StrP, setP2StrP] = useState("");
   const [p1score, setP1score] = useState<number | undefined>(undefined);
   const [p2score, setP2score] = useState<number | undefined>(undefined);
   const navigate = useNavigate();
@@ -76,6 +84,15 @@ function HomePage() {
               )}
               {p1?.totalScore && p1score ? (
                 <>
+                  <div className="fxcenter flex-col prompt-regular">
+                    <div className="font-semibold text-lg">{p1R}</div>
+                    <div className="font-semibold">Chance win</div>
+                    <div className="text-sm">{p1StrChc}</div>
+                    <div className="font-semibold">Points</div>
+                    <div className="text-sm font-semibold">K : {p1K}</div>
+                    <div className="text-sm">{p1StrP}</div>
+                  </div>
+                  
                   {p1score > 0 ? (
                     <h4 className="text-xl text-green-500 prompt-regular">
                       +{p1score}
@@ -115,6 +132,14 @@ function HomePage() {
               )}
               {p2?.totalScore && p2score ? (
                 <>
+                  <div className="fxcenter flex-col prompt-regular">
+                    <div className="font-semibold text-lg">{p2R}</div>
+                    <div className="font-semibold">Chance win</div>
+                    <div className="text-sm">{p2StrChc}</div>
+                    <div className="font-semibold">Points</div>
+                    <div className="text-sm font-semibold">K : {p2K}</div>
+                    <div className="text-sm">{p2StrP}</div>
+                  </div>
                   {p2score > 0 ? (
                     <h4 className="text-xl text-green-500 prompt-regular">
                       +{p2score}
@@ -183,8 +208,12 @@ function HomePage() {
         : loser_score > 600
         ? 15
         : 25;
-    const winPoints = k_win * (1 - chanceWinA);
-    const losePoints = k_lose * (0 - chanceWinB);
+    const winPoints = k_win * (1 - chanceWinA)
+    const losePoints = k_lose * (0 - chanceWinB)
+    const winStrChc = "1 / (1 + 10 ** (("+loser_score+" - "+winner_score+") / 400)) = "+chanceWinA.toFixed(2)
+    const loseStrChc = "1 / (1 + 10 ** (("+winner_score+" - "+loser_score+") / 400)) = "+chanceWinB.toFixed(2)
+    const winStrPoint = k_win + " * (1 - "+chanceWinA.toFixed(2)+") = "+winPoints.toFixed(2)
+    const loseStrPoint = k_lose + " * (0 - "+chanceWinB.toFixed(2)+") = "+losePoints.toFixed(2)
     const res = await userService.vote(
       pWin.pid,
       pLose.pid,
@@ -193,13 +222,29 @@ function HomePage() {
     );
     if (res.affected_row == 1) {
       if (whoWin == 1) {
+        setP1R("RA = "+winner_score)
+        setP2R("RB = "+loser_score)
+        setP1StrChc("EA = "+winStrChc)
+        setP2StrChc("EB = "+loseStrChc)
+        setP1StrP(winStrPoint)
+        setP2StrP(loseStrPoint)
+        setP1K(k_win.toString())
+        setP2K(k_lose.toString())
         setP1score(Math.round(winPoints));
         setP2score(Math.round(losePoints));
       } else {
+        setP1R("RB = "+loser_score)
+        setP2R("RA = "+winner_score)
+        setP1StrChc("EB = "+loseStrChc)
+        setP2StrChc("EA = "+winStrChc)
+        setP1StrP(loseStrPoint)
+        setP2StrP(winStrPoint)
+        setP1K(k_lose.toString())
+        setP2K(k_win.toString())
         setP1score(Math.round(losePoints));
         setP2score(Math.round(winPoints));
       }
-      delay(2000).then(() => {
+      delay(7000).then(() => {
         setP1score(undefined);
         setP2score(undefined);
         loadNextImg();
