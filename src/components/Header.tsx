@@ -1,16 +1,17 @@
-import { AppBar, Toolbar, Avatar, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Avatar, Menu, MenuItem, IconButton, TextField } from "@mui/material";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { useEffect, useRef } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 function Header() {
   const navigate = useNavigate();
   const [selectMenu, setMenu] = React.useState<null | HTMLElement>(null);
   const open = Boolean(selectMenu);
   const user = useRef<UserGetPostResponse | undefined>(undefined);
+   const input = useRef<HTMLInputElement>();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setMenu(event.currentTarget);
   };
@@ -43,6 +44,28 @@ function Header() {
         >
           TOONMASH
         </label>
+        {user.current?.type == 1 ? (
+          <>
+            <TextField
+              sx={{ width: "20%" }}
+              size="small"
+              inputRef={input}
+              InputProps={{
+                sx: {
+                  // borderStartStartRadius: 0,
+                  // borderEndStartRadius: 0,
+                  bgcolor: "white",
+                },
+
+                endAdornment: (
+                  <IconButton aria-label="search" onClick={() => {}}>
+                    <AccessTimeIcon />
+                  </IconButton>
+                ),
+              }}
+            />
+          </>
+        ) : null}
         <div className="space-x-5 flex-row flex">
           <button
             onClick={navigateToHome}
