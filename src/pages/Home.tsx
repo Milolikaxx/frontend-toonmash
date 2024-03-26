@@ -4,15 +4,22 @@ import { Service } from "../services/Service";
 import { useNavigate } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { CircularProgress } from "@mui/material";
+import { ClientJS } from "clientjs";
 import secureLocalStorage from "react-secure-storage";
+
 function HomePage() {
-  const userService = useMemo(() => {
+  const service = useMemo(() => {
     return new Service();
+  }, []);
+  const client = useMemo(() => {
+    return new ClientJS();
   }, []);
   const [loading, setLoading] = useState(true);
   const pics = useRef<PictureGetResponse[]>([]);
   const user = useRef<UserGetPostResponse | undefined>(undefined);
+  const fingerprint = useRef("");
   // const [pics, setPics] = useState<PictureGetResponse[]>([]);
+  // const [cooldown,setCooldown] = useState(0);
   const [p1, setP1] = useState<PictureGetResponse>();
   const [p2, setP2] = useState<PictureGetResponse>();
   const [p1R, setP1R] = useState("");
@@ -29,13 +36,19 @@ function HomePage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await userService.getAllPic();
+        const fp = client.getFingerprint()
+        fingerprint.current = fp.toString()
+        const rule = await service.getRule()
+        const res = await service.getPicForVote(fp.toString(),rule!.cooldown)
+        // setCooldown(rule!.cooldown)
+        console.log(res);
+        
         const imgs = shuffleImages(res);
         pics.current = imgs;
         const userStr = secureLocalStorage.getItem("user");
         // const userStr = localStorage.getItem("user");
         if (userStr) {
-          user.current = JSON.parse(userStr.toString());          
+          user.current = JSON.parse(userStr.toString());
           if (user.current) {
             if (user.current.type == 0) {
               navigate("/");
@@ -54,7 +67,40 @@ function HomePage() {
       }
     };
     loadData();
-  }, [navigate, userService]);
+  }, [client, navigate, service]);
+
+  // interface CountdownProps {
+  //   seconds: number;
+  // }
+  
+  // const Countdown: React.FC<CountdownProps> = ({ seconds }) => {
+  //   const [remainingSeconds, setRemainingSeconds] = useState(seconds);
+  
+  //   useEffect(() => {
+  //     const interval = setInterval(() => {
+  //       if (remainingSeconds > 0) {
+  //         setRemainingSeconds(remainingSeconds - 1);
+  //       } else {
+  //         clearInterval(interval);
+  //         window.location.reload();
+  //       }
+  //     }, 1000);
+  
+  //     return () => clearInterval(interval);
+  //   }, [remainingSeconds]);
+  
+  //   const formatTime = (seconds: number): string => {
+  //     const minutes = Math.floor(seconds / 60);
+  //     const remainingSeconds = seconds % 60;
+  //     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  //   };
+  
+  //   return (
+  //     <div>
+  //       {formatTime(remainingSeconds)}
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
@@ -70,19 +116,26 @@ function HomePage() {
             <div className="w-2/5 h-full fxcenter flex-col space-y-1 transition">
               <img
                 className="w-full h-96 object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
-                src={p1?.img}
+                src={p1.img}
                 onClick={() => {
-                  if (p1?.totalScore && p2?.totalScore) {
-                    calScore(p1, p2, 1);
+                  if (!p1score && !p2score) {
+                    if (p1.totalScore && p2.totalScore) {
+                      calScore(p1, p2, 1);
+                    }
                   }
                 }}
               />
               {user.current && (
-                <h4 className="text-xl text-black prompt-regular">
-                  {p1?.name}
+                <h4
+                  className="text-xl text-black prompt-regular cursor-pointer hover:text-violet-600 transition"
+                  onClick={() => {
+                    navigate("/profile/" + p1.user_id);
+                  }}
+                >
+                  {p1.name}
                 </h4>
               )}
-              {p1?.totalScore && p1score ? (
+              {p1.totalScore && p1score ? (
                 <>
                   <div className="fxcenter flex-col prompt-regular">
                     <div className="font-semibold text-lg">{p1R}</div>
@@ -92,7 +145,7 @@ function HomePage() {
                     <div className="text-sm font-semibold">K : {p1K}</div>
                     <div className="text-sm">{p1StrP}</div>
                   </div>
-                  
+
                   {p1score > 0 ? (
                     <h4 className="text-xl text-green-500 prompt-regular">
                       +{p1score}
@@ -118,19 +171,26 @@ function HomePage() {
             <div className="w-2/5 h-full fxcenter flex-col space-y-1">
               <img
                 className="w-full h-96 object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
-                src={p2?.img}
+                src={p2.img}
                 onClick={() => {
-                  if (p1?.totalScore && p2?.totalScore) {
-                    calScore(p2, p1, 2);
+                  if (!p1score && !p2score) {
+                    if (p1.totalScore && p2.totalScore) {
+                      calScore(p2, p1, 2);
+                    }
                   }
                 }}
               />
               {user.current && (
-                <h4 className="text-xl text-black prompt-regular">
-                  {p2?.name}
+                <h4
+                  className="text-xl text-black prompt-regular cursor-pointer hover:text-violet-600 transition"
+                  onClick={() => {
+                    navigate("/profile/" + p2.user_id);
+                  }}
+                >
+                  {p2.name}
                 </h4>
               )}
-              {p2?.totalScore && p2score ? (
+              {p2.totalScore && p2score ? (
                 <>
                   <div className="fxcenter flex-col prompt-regular">
                     <div className="font-semibold text-lg">{p2R}</div>
@@ -176,8 +236,8 @@ function HomePage() {
         </Button> */}
         </div>
       ) : (
-        <h3 className="text-xl text-black prompt-regular">
-          ไม่มีรูปที่จะโหวตหรือคุณโหวตครบแล้ว
+        <h3 className="text-xl text-black prompt-regular text-center">
+          ไม่มีรูปที่จะโหวตหรือคุณโหวตครบแล้ว กรุณารอคูลดาวน์
         </h3>
       )}
     </div>
@@ -208,43 +268,66 @@ function HomePage() {
         : loser_score > 600
         ? 15
         : 25;
-    const winPoints = k_win * (1 - chanceWinA)
-    const losePoints = k_lose * (0 - chanceWinB)
-    const winStrChc = "1 / (1 + 10 ** (("+loser_score+" - "+winner_score+") / 400)) = "+chanceWinA.toFixed(2)
-    const loseStrChc = "1 / (1 + 10 ** (("+winner_score+" - "+loser_score+") / 400)) = "+chanceWinB.toFixed(2)
-    const winStrPoint = k_win + " * (1 - "+chanceWinA.toFixed(2)+") = "+winPoints.toFixed(2)
-    const loseStrPoint = k_lose + " * (0 - "+chanceWinB.toFixed(2)+") = "+losePoints.toFixed(2)
-    const res = await userService.vote(
+    const winPoints = k_win * (1 - chanceWinA);
+    const losePoints = k_lose * (0 - chanceWinB);
+    const winStrChc =
+      "1 / (1 + 10 ** ((" +
+      loser_score +
+      " - " +
+      winner_score +
+      ") / 400)) = " +
+      chanceWinA.toFixed(2);
+    const loseStrChc =
+      "1 / (1 + 10 ** ((" +
+      winner_score +
+      " - " +
+      loser_score +
+      ") / 400)) = " +
+      chanceWinB.toFixed(2);
+    const winStrPoint =
+      k_win +
+      " * (1 - " +
+      chanceWinA.toFixed(2) +
+      ") = " +
+      winPoints.toFixed(2);
+    const loseStrPoint =
+      k_lose +
+      " * (0 - " +
+      chanceWinB.toFixed(2) +
+      ") = " +
+      losePoints.toFixed(2);
+    const res = await service.vote(
       pWin.pid,
       pLose.pid,
       winPoints,
-      losePoints
+      losePoints,
+      fingerprint.current
     );
     if (res.affected_row == 1) {
       if (whoWin == 1) {
-        setP1R("RA = "+winner_score)
-        setP2R("RB = "+loser_score)
-        setP1StrChc("EA = "+winStrChc)
-        setP2StrChc("EB = "+loseStrChc)
-        setP1StrP(winStrPoint)
-        setP2StrP(loseStrPoint)
-        setP1K(k_win.toString())
-        setP2K(k_lose.toString())
+        setP1R("RA = " + winner_score);
+        setP2R("RB = " + loser_score);
+        setP1StrChc("EA = " + winStrChc);
+        setP2StrChc("EB = " + loseStrChc);
+        setP1StrP("PA = " + winStrPoint);
+        setP2StrP("PB = " + loseStrPoint);
+        setP1K(k_win.toString());
+        setP2K(k_lose.toString());
         setP1score(Math.round(winPoints));
         setP2score(Math.round(losePoints));
       } else {
-        setP1R("RB = "+loser_score)
-        setP2R("RA = "+winner_score)
-        setP1StrChc("EB = "+loseStrChc)
-        setP2StrChc("EA = "+winStrChc)
-        setP1StrP(loseStrPoint)
-        setP2StrP(winStrPoint)
-        setP1K(k_lose.toString())
-        setP2K(k_win.toString())
+        setP1R("RB = " + loser_score);
+        setP2R("RA = " + winner_score);
+        setP1StrChc("EB = " + loseStrChc);
+        setP2StrChc("EA = " + winStrChc);
+        setP1StrP("PB = " + loseStrPoint);
+        setP2StrP("PA = " + winStrPoint);
+        setP1K(k_lose.toString());
+        setP2K(k_win.toString());
         setP1score(Math.round(losePoints));
         setP2score(Math.round(winPoints));
       }
-      delay(7000).then(() => {
+      delay(3000).then(() => {
         setP1score(undefined);
         setP2score(undefined);
         loadNextImg();

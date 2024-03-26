@@ -193,10 +193,10 @@ function EditPage() {
                     if (inputUsername.current?.value.trim() && inputName.current?.value.trim()) {
                       if (inputPwd.current?.value.trim()) {
                         if (inputPwd.current.value == inputCPwd.current?.value) {
-                          save(inputUsername.current.value,inputPwd.current.value,inputName.current.value)
+                          save(inputUsername.current.value.trim(),inputPwd.current.value.trim(),inputName.current.value.trim())
                         }
                       }else{
-                        save(inputUsername.current.value,"",inputName.current.value)
+                        save(inputUsername.current.value.trim(),"",inputName.current.value.trim())
                       }
                     }
                   }}

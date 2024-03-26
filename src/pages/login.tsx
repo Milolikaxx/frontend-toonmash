@@ -17,7 +17,7 @@ function LoginPage() {
     <>
       <div className="flex w-screen h-screen justify-center items-center">
         <div className="relative hidden h-screen   md:flex md:w-2/5">
-          <img src="src\assets\login.png" alt="" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/toonmash-db-img.appspot.com/o/files%2Flogin.png?alt=media&token=520de6c9-7cf2-4a30-98cf-abd9f18f1ba7" alt="" />
         </div>
         <div className="flex md:w-3/5 justify-center  ">
           <div className="w-[400px] h-[400px] bg-white rounded-2xl shadow-2xl justify-start  flex flex-col">

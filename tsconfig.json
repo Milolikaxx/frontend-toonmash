@@ -4,6 +4,11 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "types": [
+      "node",
+      "@types/react",
+      "@types/clientjs"
+    ],
     "skipLibCheck": true,
 
     /* Bundler mode */

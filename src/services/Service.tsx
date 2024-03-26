@@ -5,9 +5,10 @@ import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 import { VoteCountGetResponse } from "../model/votecount_get_res";
+import { RuleGetResponse } from "../model/rule_get_res";
 
-// export const HOST = "http://localhost:3001";
-export const HOST = "https://backend-toonmash-1.onrender.com";
+export const HOST = "http://localhost:3001";
+// export const HOST = "https://backend-toonmash-1.onrender.com";
 
 export class Service {
   //authen
@@ -93,6 +94,20 @@ export class Service {
   async getAllPic() {
     const url = HOST + "/pic";
     const response = await axios.get(url);
+    if (response.status == 200) {
+      const pics: PictureGetResponse[] = response.data;
+      return pics;
+    }else{
+      return [];
+    }
+  }
+  async getPicForVote(fgPrint:string,cooldown:number) {
+    const url = HOST + "/pic/picvote";
+    const body = {
+      fgPrint: fgPrint,
+      cooldown: cooldown
+    };
+    const response = await axios.post(url, body);
     if (response.status == 200) {
       const pics: PictureGetResponse[] = response.data;
       return pics;
@@ -191,7 +206,8 @@ export class Service {
     winner: number,
     loser: number,
     scoreWin: number,
-    scoreLose: number
+    scoreLose: number,
+    fgPrint:string
   ) {
     const url = HOST + "/vote";
     const body = {
@@ -199,9 +215,21 @@ export class Service {
       loser: loser,
       scoreWin: scoreWin,
       scoreLose: scoreLose,
+      fgPrint: fgPrint
     };
+    
     const response = await axios.post(url, body);
     const aff: VotePostResponse = response.data;
     return aff;
+  }
+  async getRule() {
+    const url = HOST + "/vote/cd";
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      const rule: RuleGetResponse = response.data;
+      return rule;
+    }else{
+      return undefined;
+    }
   }
 }

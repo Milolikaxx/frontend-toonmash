@@ -48,7 +48,7 @@ function SignUpPage() {
         <div className="grid grid-cols-5">
           <div className="relative hidden lg:col-span-2 lg:flex">
             <img
-              src="src\assets\image 4.png"
+              src="https://firebasestorage.googleapis.com/v0/b/toonmash-db-img.appspot.com/o/files%2Fimage%204.png?alt=media&token=14d55f33-d75e-49b9-a409-4fcc7b750777"
               alt=""
               className="h-screen w-full object-cover"
             />
@@ -220,7 +220,7 @@ function SignUpPage() {
     const user = await service.register(username,name,pwd,url);
     if (user) {
       secureLocalStorage.setItem("user", JSON.stringify(user));
-      navigate("")
+      navigate("/")
       // localStorage.setItem("user", JSON.stringify(user));
     }
   }

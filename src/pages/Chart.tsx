@@ -19,6 +19,8 @@ function ChartPage() {
     return new Service();
   }, []);
   const pic = useRef<PictureGetResponse>();
+  const pics = useRef<PictureGetResponse[]>([]);
+  const picsDayAgo = useRef<PictureGetResponse[]>([]);
   const diffScore = useRef(0);
   const htrScore = useRef<PictureByDateGetResponse[]>([]);
   const picOverall = useRef<VoteCountGetResponse | undefined>(undefined);
@@ -40,6 +42,10 @@ function ChartPage() {
       try {
         const resPic = await service.getPicByID(+id!);
         pic.current = resPic;
+        let res = await service.getAllPic();
+        pics.current = res;
+        res = await service.getPicRankDayAgo();
+        picsDayAgo.current = res;
         const resHtr = await service.getPicScoreByDate(+id!);
         htrScore.current = resHtr;
         const pOverall = await service.getPicOverall(+id!);
@@ -90,13 +96,12 @@ function ChartPage() {
             );
           }
         }
-        setDateList(dates);
-        setScoreWinList(wScores);
-        setScoreLoseList(lScores);
-        setTotalScoreList(totalScores.length > 1 ? totalScores : [1000+wScores[0]-lScores[0]]);
+        setDateList(dates.length > 0 ? dates : [formatDate(new Date(currentDate))]);
+        setScoreWinList(wScores.length > 0 ? wScores : [0]);
+        setScoreLoseList(lScores.length > 0 ? lScores : [0]);
+        setTotalScoreList(totalScores.length > 1 ? totalScores : wScores.length > 0 && lScores.length > 0 ? [1000+wScores[0]-lScores[0]] : [1000]);
         
-        diffScore.current =
-          totalScores!.slice(-1)[0] - totalScores!.slice(-2)[0];
+        diffScore.current = totalScores.length > 1 ? totalScores.slice(-1)[0] - totalScores.slice(-2)[0] : wScores.length > 0 && lScores.length > 0 ? wScores[0]-lScores[0] : 0;
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -115,11 +120,13 @@ function ChartPage() {
             <IconButton className="mb-4" onClick={() => navigate(-1)}>
               <ArrowBackRoundedIcon sx={{ fontSize: 35 }} />
             </IconButton>
-            <div className="ms-5 mt-2 flex flex-col prompt-regular text-lg">
+            <div className="flex ">
+              
+              <div className="ms-5 mt-2 flex flex-col prompt-regular text-lg">
               <div className="flex items-center gap-3">
                 <div className="font-bold text-violet-700">Total score</div>
                 <div className="text-gray-600">{pic.current?.totalScore}</div>
-                {totalScoreList!.slice(-1)[0] > totalScoreList!.slice(-2)[0] ? (
+                {diffScore.current > 0 ? (
                   <div className="text-green-600 fxcenter gap-2">
                     <div className="bg-green-600 text-white w-6 h-6 fxcenter rounded-lg">
                       <ArrowDropUpIcon sx={{ fontSize: 35 }} />
@@ -127,8 +134,7 @@ function ChartPage() {
 
                     {diffScore.current}
                   </div>
-                ) : totalScoreList!.slice(-1)[0] <
-                  totalScoreList!.slice(-2)[0] ? (
+                ) : diffScore.current < 0 ? (
                   <div className="text-red-600 fxcenter gap-2">
                     <div className="bg-red-600 text-white w-6 h-6 fxcenter rounded-lg">
                       <ArrowDropDownIcon sx={{ fontSize: 35 }} />
@@ -153,6 +159,8 @@ function ChartPage() {
                 </div>
               </div>
             </div>
+            </div>
+            
           </div>
 
           <div className="w-full mt-96 lg:mt-0 grid grid-cols-10 gap-4">
