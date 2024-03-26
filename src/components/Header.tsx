@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Avatar, Menu, MenuItem, IconButton, TextField } from "@mui/material";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ function Header() {
         >
           TOONMASH
         </label>
-        {user.current?.type == 1 ? (
+        {user?.type == 1 ? (
           <>
             <TextField
               sx={{ width: "20%" }}
