@@ -4,6 +4,7 @@ import { PictureGetResponse } from "../model/pic_get_res";
 import { VotePostResponse } from "../model/vote_post_res";
 import { UploadPostResponse } from "../model/upload_post_res";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
+import { VoteCountGetResponse } from "../model/votecount_get_res";
 
 // export const HOST = "http://localhost:3001";
 export const HOST = "https://backend-toonmash-1.onrender.com";
@@ -120,6 +121,16 @@ export class Service {
     const response = await axios.get(url);
     const pic: PictureGetResponse = response.data;
     return pic;
+  }
+  async getPicOverall(id: number) {
+    const url = HOST + `/vote/count?id=${id}`;
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      const picOvel: VoteCountGetResponse = response.data;
+      return picOvel;
+    }else{
+      return undefined;
+    }
   }
   async getPicScoreByDate(id: number) {
     const url = HOST + `/vote/date?id=${id}`;

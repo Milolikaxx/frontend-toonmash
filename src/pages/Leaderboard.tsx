@@ -52,7 +52,7 @@ function LeaderboardPage() {
                     <div className="flex flex-col justify-center items-center bg-amber-400 px-2 pt-2 py-1 rounded-md">
                       <div className="overflow-hidden">
                         <img
-                          className="rounded-t-md object-cover cursor-pointer transition duration-300 hover:scale-110"
+                          className="rounded-t-md h-[200px] w-[200px] object-cover cursor-pointer transition duration-300 hover:scale-110"
                           src={pics.current[0].img}
                           style={{ maxHeight: "200px" }}
                           onClick={() => {
@@ -68,13 +68,13 @@ function LeaderboardPage() {
                           height: "60px",
                         }}
                       />
-                      <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
+                      <div className="w-full ps-5 flex justify-between items-end font-bold prompt-regular">
                       <div className="fxcenter gap-1 pt-1">
                           {picsDayAgo.current.findIndex(
                             (p) => p.pid === pics.current[0].pid
                           ) > 0 ? (
                             <div className="text-green-600 fxcenter gap-1">
-                              <div className="bg-green-600 text-white w-6 h-6 fxcenter rounded-lg">
+                              <div className="bg-green-600 text-white w-5 h-5 fxcenter rounded-lg">
                                 <ArrowDropUpIcon sx={{ fontSize: 30 }} />
                               </div>
 
@@ -88,7 +88,7 @@ function LeaderboardPage() {
                               (p) => p.pid === pics.current[0].pid
                             ) < 0 ? (
                             <div className="text-red-600 fxcenter gap-1">
-                              <div className="bg-red-600 text-white w-6 h-6 fxcenter rounded-lg">
+                              <div className="bg-red-600 text-white w-5 h-5 fxcenter rounded-lg">
                                 <ArrowDropDownIcon sx={{ fontSize: 30 }} />
                               </div>
 
@@ -100,7 +100,7 @@ function LeaderboardPage() {
                             </div>
                           ) : (
                             <div className="text-gray-500 fxcenter gap-1">
-                              <div className="bg-gray-500 text-white w-6 h-6 fxcenter rounded-lg">
+                              <div className="bg-gray-500 text-white w-5 h-5 fxcenter rounded-lg">
                                 <HorizontalRuleIcon sx={{ fontSize: 20 }} />
                               </div>
                             </div>
@@ -137,13 +137,13 @@ function LeaderboardPage() {
                           height: "50px",
                         }}
                       />
-                      <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
+                      <div className="w-full ps-5 flex justify-between items-end font-bold prompt-regular">
                       <div className="fxcenter gap-1">
                           {picsDayAgo.current.findIndex(
                             (p) => p.pid === pics.current[1].pid
                           ) > 1 ? (
                             <div className="text-green-600 fxcenter gap-1">
-                              <div className="bg-green-600 text-white w-4 h-4 fxcenter rounded-lg">
+                              <div className="bg-green-600 text-white w-4 h-4 fxcenter rounded-md">
                                 <ArrowDropUpIcon sx={{ fontSize: 25 }} />
                               </div>
 
@@ -157,7 +157,7 @@ function LeaderboardPage() {
                               (p) => p.pid === pics.current[1].pid
                             ) < 1 ? (
                             <div className="text-red-600 fxcenter gap-1">
-                              <div className="bg-red-600 text-white w-4 h-4 fxcenter rounded-lg">
+                              <div className="bg-red-600 text-white w-4 h-4 fxcenter rounded-md">
                                 <ArrowDropDownIcon sx={{ fontSize: 25 }} />
                               </div>
 
@@ -169,7 +169,7 @@ function LeaderboardPage() {
                             </div>
                           ) : (
                             <div className="text-gray-500 fxcenter gap-1">
-                              <div className="bg-gray-500 text-white w-4 h-4 fxcenter rounded-lg">
+                              <div className="bg-gray-500 text-white w-4 h-4 fxcenter rounded-md">
                                 <HorizontalRuleIcon sx={{ fontSize: 15 }} />
                               </div>
                             </div>
@@ -211,7 +211,7 @@ function LeaderboardPage() {
                           height: "50px",
                         }}
                       />
-                      <div className="w-full ps-6 flex justify-between items-end font-bold prompt-regular">
+                      <div className="w-full ps-5 flex justify-between items-end font-bold prompt-regular">
                       <div className="fxcenter gap-1">
                           {picsDayAgo.current.findIndex(
                             (p) => p.pid === pics.current[2].pid
