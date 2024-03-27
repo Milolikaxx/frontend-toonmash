@@ -3,9 +3,10 @@ import { PictureGetResponse } from "../model/pic_get_res";
 import { Service } from "../services/Service";
 import { useNavigate } from "react-router-dom";
 import { UserGetPostResponse } from "../model/response/user_getpost_response";
-import { CircularProgress } from "@mui/material";
+import ClockLoader from "react-spinners/ClockLoader";
 import { ClientJS } from "clientjs";
 import secureLocalStorage from "react-secure-storage";
+import RingLoader from "react-spinners/RingLoader";
 
 function HomePage() {
   const service = useMemo(() => {
@@ -36,13 +37,12 @@ function HomePage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const fp = client.getFingerprint()
-        fingerprint.current = fp.toString()
-        const rule = await service.getRule()
-        const res = await service.getPicForVote(fp.toString(),rule!.cooldown)
+        const fp = client.getFingerprint();
+        fingerprint.current = fp.toString();
+        const rule = await service.getRule();
+        const res = await service.getPicForVote(fp.toString(), rule!.cooldown);
         // setCooldown(rule!.cooldown)
-        console.log(res);
-        
+
         const imgs = shuffleImages(res);
         pics.current = imgs;
         const userStr = secureLocalStorage.getItem("user");
@@ -72,10 +72,10 @@ function HomePage() {
   // interface CountdownProps {
   //   seconds: number;
   // }
-  
+
   // const Countdown: React.FC<CountdownProps> = ({ seconds }) => {
   //   const [remainingSeconds, setRemainingSeconds] = useState(seconds);
-  
+
   //   useEffect(() => {
   //     const interval = setInterval(() => {
   //       if (remainingSeconds > 0) {
@@ -85,16 +85,16 @@ function HomePage() {
   //         window.location.reload();
   //       }
   //     }, 1000);
-  
+
   //     return () => clearInterval(interval);
   //   }, [remainingSeconds]);
-  
+
   //   const formatTime = (seconds: number): string => {
   //     const minutes = Math.floor(seconds / 60);
   //     const remainingSeconds = seconds % 60;
   //     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   //   };
-  
+
   //   return (
   //     <div>
   //       {formatTime(remainingSeconds)}
@@ -103,19 +103,24 @@ function HomePage() {
   // };
 
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
+    <div className="h-screen flex justify-center items-center">
       {loading ? (
-        <CircularProgress />
+        <RingLoader color="#7c3aed" />
       ) : p1 && p2 ? (
-        <div className="w-3/5 flex flex-col items-center justify-start">
-          <h1 className="mb-10 text-4xl text-black font-bold prompt-regular">
-            Who’s cooler? Click to choose.
-          </h1>
+        <div className="w-full px-3 md:px-0 md:w-3/5 md:mt-0 flex flex-col items-center justify-start">
+          <div className="mb-10 flex flex-col min-[900px]:flex-row md:gap-2 justify-center items-center">
+            <h1 className="text-4xl text-black font-bold prompt-regular">
+              Who’s cooler?
+            </h1>
+            <h1 className="text-4xl text-black font-bold prompt-regular">
+              Click to choose.
+            </h1>
+          </div>
 
-          <div className="w-full h-3/5 flex justify-between items-center">
+          <div className="w-full h-3/5 flex flex-row justify-between items-center">
             <div className="w-2/5 h-full fxcenter flex-col space-y-1 transition">
               <img
-                className="w-full h-96 object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
+                className="w-full h-60 md:h-96 min-w-[150px] md:min-w-[250px] object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
                 src={p1.img}
                 onClick={() => {
                   if (!p1score && !p2score) {
@@ -140,7 +145,7 @@ function HomePage() {
                   <div className="fxcenter flex-col prompt-regular">
                     <div className="font-semibold text-lg">{p1R}</div>
                     <div className="font-semibold">Chance win</div>
-                    <div className="text-sm">{p1StrChc}</div>
+                    <div className="text-[11px] md:text-sm">{p1StrChc}</div>
                     <div className="font-semibold">Points</div>
                     <div className="text-sm font-semibold">K : {p1K}</div>
                     <div className="text-sm">{p1StrP}</div>
@@ -170,7 +175,7 @@ function HomePage() {
             </div>
             <div className="w-2/5 h-full fxcenter flex-col space-y-1">
               <img
-                className="w-full h-96 object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
+                className="w-full h-60 md:h-96 min-w-[150px] md:min-w-[250px] object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
                 src={p2.img}
                 onClick={() => {
                   if (!p1score && !p2score) {
@@ -195,7 +200,7 @@ function HomePage() {
                   <div className="fxcenter flex-col prompt-regular">
                     <div className="font-semibold text-lg">{p2R}</div>
                     <div className="font-semibold">Chance win</div>
-                    <div className="text-sm">{p2StrChc}</div>
+                    <div className="text-[11px] md:text-sm">{p2StrChc}</div>
                     <div className="font-semibold">Points</div>
                     <div className="text-sm font-semibold">K : {p2K}</div>
                     <div className="text-sm">{p2StrP}</div>
@@ -236,9 +241,12 @@ function HomePage() {
         </Button> */}
         </div>
       ) : (
-        <h3 className="text-xl text-black prompt-regular text-center">
-          ไม่มีรูปที่จะโหวตหรือคุณโหวตครบแล้ว กรุณารอคูลดาวน์
-        </h3>
+        <div className="flex flex-col items-center justify-center gap-3">
+          <h3 className="text-xl text-black prompt-regular text-center">
+            ไม่มีรูปที่จะโหวตหรือคุณโหวตครบแล้ว กรุณารอคูลดาวน์
+          </h3>
+          <ClockLoader color="#7c3aed" />
+        </div>
       )}
     </div>
   );

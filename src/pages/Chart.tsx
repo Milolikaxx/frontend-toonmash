@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Service } from "../services/Service";
 import { PictureByDateGetResponse } from "../model/picbydate_get_res";
-import { CircularProgress, IconButton, Tab, Tabs } from "@mui/material";
+import { IconButton, Tab, Tabs } from "@mui/material";
+import RingLoader from "react-spinners/RingLoader";
 import TabContext from "@mui/lab/TabContext";
 import { PictureGetResponse } from "../model/pic_get_res";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
@@ -46,20 +47,21 @@ function ChartPage() {
         pics.current = res;
         res = await service.getPicRankDayAgo();
         picsDayAgo.current = res;
+
         const resHtr = await service.getPicScoreByDate(+id!);
         htrScore.current = resHtr;
         const pOverall = await service.getPicOverall(+id!);
         picOverall.current = pOverall;
-        
-        const resScore7Agos = await service.getPicScore7DateAgos(+id!);
-        const score7Agos: ScoreDateAgosGetResponse = resScore7Agos!;
+
+        const createDay = new Date(pic.current.created_at);
         const currentDate = new Date();
         const daysAgo = new Date();
         daysAgo.setDate(currentDate.getDate() - 6);
-        const createDay = new Date(pic.current.created_at);
+        const resScore7Agos = await service.getScoreDateAgos(+id!);
         if (createDay > daysAgo) {
           daysAgo.setDate(createDay.getDate());
         }
+        const score7Agos: ScoreDateAgosGetResponse = resScore7Agos!;
         const dates = [];
         const totalScores: number[] = [];
         const wScores: number[] = [];
@@ -83,7 +85,7 @@ function ChartPage() {
               totalScores.slice(-1)[0]
                 ? totalScores.slice(-1)[0] + score.totalScore
                 : score7Agos
-                ? score7Agos.totalScore + score.totalScore
+                ? score7Agos.totalScore
                 : 1000
             );
           } else {
@@ -96,12 +98,25 @@ function ChartPage() {
             );
           }
         }
-        setDateList(dates.length > 0 ? dates : [formatDate(new Date(currentDate))]);
+        setDateList(
+          dates.length > 0 ? dates : [formatDate(new Date(currentDate))]
+        );
         setScoreWinList(wScores.length > 0 ? wScores : [0]);
         setScoreLoseList(lScores.length > 0 ? lScores : [0]);
-        setTotalScoreList(totalScores.length > 1 ? totalScores : wScores.length > 0 && lScores.length > 0 ? [1000+wScores[0]-lScores[0]] : [1000]);
-        
-        diffScore.current = totalScores.length > 1 ? totalScores.slice(-1)[0] - totalScores.slice(-2)[0] : wScores.length > 0 && lScores.length > 0 ? wScores[0]-lScores[0] : 0;
+        setTotalScoreList(
+          totalScores.length > 1
+            ? totalScores
+            : wScores.length > 0 && lScores.length > 0
+            ? [1000 + wScores[0] - lScores[0]]
+            : [1000]
+        );
+
+        diffScore.current =
+          totalScores.length > 1
+            ? totalScores.slice(-1)[0] - totalScores.slice(-2)[0]
+            : wScores.length > 0 && lScores.length > 0
+            ? wScores[0] - lScores[0]
+            : 0;
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -111,68 +126,118 @@ function ChartPage() {
     loadData();
   }, [id, service]);
   return (
-    <div className="h-screen w-screen fxcenter">
+    <div className="h-screen fxcenter">
       {loading ? (
-        <CircularProgress />
+        <RingLoader color="#7c3aed"/>
       ) : (
-        <div className="h-full w-full pt-10 px-10 lg:px-44 flex flex-col justify-center items-start">
+        <div className=" w-full pt-20 lg:pt-10 px-10 lg:px-44 flex flex-col justify-center items-start">
           <div className="w-full flex items-start">
             <IconButton className="mb-4" onClick={() => navigate(-1)}>
               <ArrowBackRoundedIcon sx={{ fontSize: 35 }} />
             </IconButton>
-            <div className="flex ">
-              
-              <div className="ms-5 mt-2 flex flex-col prompt-regular text-lg">
+            <div className="flex items-start ms-5 mt-2 prompt-regular text-lg gap-5">
               <div className="flex items-center gap-3">
-                <div className="font-bold text-violet-700">Total score</div>
-                <div className="text-gray-600">{pic.current?.totalScore}</div>
-                {diffScore.current > 0 ? (
-                  <div className="text-green-600 fxcenter gap-2">
-                    <div className="bg-green-600 text-white w-6 h-6 fxcenter rounded-lg">
-                      <ArrowDropUpIcon sx={{ fontSize: 35 }} />
-                    </div>
+                <div className="font-bold text-violet-700">Rank</div>
+                <div className="text-gray-600">{pics.current.findIndex((p) => p.pid === pic.current!.pid)+1}</div>
+                {picsDayAgo.current.findIndex(
+                  (p) => p.pid === pic.current!.pid
+                ) >= 0 ? (
+                  <>
+                    {picsDayAgo.current.findIndex(
+                      (p) => p.pid === pic.current!.pid
+                    ) > pics.current.findIndex((p) => p.pid === pic.current!.pid) ? (
+                      <div className="text-green-600 fxcenter gap-1">
+                        <div className="bg-green-600 text-white w-4 h-4 fxcenter rounded-md">
+                          <ArrowDropUpIcon sx={{ fontSize: 30 }} />
+                        </div>
 
-                    {diffScore.current}
-                  </div>
-                ) : diffScore.current < 0 ? (
-                  <div className="text-red-600 fxcenter gap-2">
-                    <div className="bg-red-600 text-white w-6 h-6 fxcenter rounded-lg">
-                      <ArrowDropDownIcon sx={{ fontSize: 35 }} />
-                    </div>
+                        {Math.abs(
+                          picsDayAgo.current.findIndex(
+                            (p) => p.pid === pic.current!.pid
+                          ) - pics.current.findIndex((p) => p.pid === pic.current!.pid)
+                        )}
+                      </div>
+                    ) : picsDayAgo.current.findIndex(
+                        (p) => p.pid === pic.current!.pid
+                      ) < pics.current.findIndex((p) => p.pid === pic.current!.pid) ? (
+                      <div className="text-red-600 fxcenter gap-1">
+                        <div className="bg-red-600 text-white w-4 h-4 fxcenter rounded-md">
+                          <ArrowDropDownIcon sx={{ fontSize: 30 }} />
+                        </div>
 
-                    {diffScore.current}
-                  </div>
+                        {Math.abs(
+                          picsDayAgo.current.findIndex(
+                            (p) => p.pid === pic.current!.pid
+                          ) - pics.current.findIndex((p) => p.pid === pic.current!.pid)
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-gray-500 fxcenter gap-1">
+                        <div className="bg-gray-500 text-white w-4 h-4 fxcenter rounded-md">
+                          <HorizontalRuleIcon sx={{ fontSize: 20 }} />
+                        </div>
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <div className="text-gray-500 fxcenter gap-2">
-                    <div className="bg-gray-500 text-white w-6 h-6 fxcenter rounded-lg">
-                      <HorizontalRuleIcon sx={{ fontSize: 20 }} />
+                  <div className="text-green-600 fxcenter gap-1">
+                    <div className="bg-green-600 text-white w-4 h-4 fxcenter rounded-md">
+                      <ArrowDropUpIcon sx={{ fontSize: 30 }} />
                     </div>
-                    {diffScore.current}
+                    {pics.current.length - pics.current.findIndex((p) => p.pid === pic.current!.pid)}
                   </div>
                 )}
               </div>
+              <div className=" flex flex-col">
+                <div className="flex items-center gap-3">
+                  <div className="font-bold text-violet-700">Total score</div>
+                  <div className="text-gray-600">{pic.current?.totalScore}</div>
+                  {diffScore.current > 0 ? (
+                    <div className="text-green-600 fxcenter gap-2">
+                      <div className="bg-green-600 text-white w-6 h-6 fxcenter rounded-lg">
+                        <ArrowDropUpIcon sx={{ fontSize: 35 }} />
+                      </div>
 
-              <div className="flex gap-3">
-                <div className="font-bold text-violet-700">Created At</div>
-                <div className="text-gray-600">
-                  {formatDate(new Date(pic.current!.created_at))}
+                      {diffScore.current}
+                    </div>
+                  ) : diffScore.current < 0 ? (
+                    <div className="text-red-600 fxcenter gap-2">
+                      <div className="bg-red-600 text-white w-6 h-6 fxcenter rounded-lg">
+                        <ArrowDropDownIcon sx={{ fontSize: 35 }} />
+                      </div>
+
+                      {diffScore.current}
+                    </div>
+                  ) : (
+                    <div className="text-gray-500 fxcenter gap-2">
+                      <div className="bg-gray-500 text-white w-6 h-6 fxcenter rounded-lg">
+                        <HorizontalRuleIcon sx={{ fontSize: 20 }} />
+                      </div>
+                      {diffScore.current}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="font-bold text-violet-700">Created At</div>
+                  <div className="text-gray-600">
+                    {formatDate(new Date(pic.current!.created_at))}
+                  </div>
                 </div>
               </div>
             </div>
-            </div>
-            
           </div>
 
-          <div className="w-full mt-96 lg:mt-0 grid grid-cols-10 gap-4">
+          <div className="w-full mt-2 grid grid-cols-10 gap-4">
             <div className="col-span-full lg:col-span-4 grid grid-rows-12 grid-flow-col max-h-[500px]">
-              <div className="row-span-full">
+              <div className="row-span-full flex justify-center">
                 <img
                   src={pic.current!.img}
-                  className="w-full rounded-xl object-cover h-full"
+                  className="w-[300px] h-[300px] lg:w-full lg:h-full rounded-xl object-cover"
                 />
               </div>
             </div>
-            <div className="col-span-full lg:col-span-6 max-h-[480px]">
+            <div className="col-span-full lg:col-span-6 max-h-[250px] lg:max-h-[480px]">
               <TabContext value={value}>
                 <Tabs
                   value={value}
@@ -256,7 +321,9 @@ function ChartPage() {
                       ]}
                     />
                   ) : (
-                    <div className="text-lg prompt-regular text-center">This picture has not been voted yet.</div>
+                    <div className="text-lg prompt-regular text-center">
+                      This picture has not been voted yet.
+                    </div>
                   )}
                 </TabPanel>
               </TabContext>
@@ -289,6 +356,7 @@ function ChartPage() {
               </div> */}
             </div>
           </div>
+
         </div>
       )}
     </div>

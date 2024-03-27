@@ -1,5 +1,5 @@
 // import { useNavigate } from "react-router-dom";
-import { Avatar, Card, CircularProgress, TextField } from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
@@ -8,6 +8,7 @@ import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { Service } from "../services/Service";
+import RingLoader from "react-spinners/RingLoader";
 
 function EditPage() {
   const service = useMemo(() => {
@@ -70,18 +71,10 @@ function EditPage() {
     <>
       <div className="h-screen flex justify-center items-center">
         {loading ? (
-          <CircularProgress />
+          <RingLoader color="#7c3aed" />
         ) : (
-          <Card
-            className="flex flex-col"
-            sx={{
-              backgroundColor: "white",
-              width: "400px",
-              height: "600px",
-              justifyContent: "start",
-              boxShadow: 3,
-              borderRadius: "30px",
-            }}
+          <div
+            className="flex flex-col justify-start mt-14 w-[400px] h-[600px] rounded-2xl md:border shadow-none md:shadow-lg"
           >
             <div className="flex flex-row mb-5 mt-10 ml-10 r">
               <ArrowBackIcon
@@ -207,7 +200,7 @@ function EditPage() {
                 </button>
               </div>
             </div>
-          </Card>
+          </div>
         )}
       </div>
     </>

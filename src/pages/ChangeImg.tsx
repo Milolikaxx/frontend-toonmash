@@ -5,12 +5,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import secureLocalStorage from "react-secure-storage";
 import { PictureGetResponse } from "../model/pic_get_res";
-import { CircularProgress } from "@mui/material";
+import RingLoader from "react-spinners/RingLoader";
 function ChangeImgPage() {
   const service = useMemo(() => {
     return new Service();
   }, []);
-    const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const user = useRef<UserGetPostResponse | undefined>(undefined);
@@ -54,12 +54,10 @@ function ChangeImgPage() {
       } finally {
         setLoading(false);
       }
-      
     };
     loadData();
   }, [id, navigate, service]);
 
-  
   async function uploadFile() {
     let url = "";
     if (image) {
@@ -67,15 +65,15 @@ function ChangeImgPage() {
     } else {
       url = imageUrl!;
     }
-     await service.changePic(pic.current!.pid, url);
-   
+    await service.changePic(pic.current!.pid, url);
+
     navigate("/profile/" + user.current!.uid);
-    
   }
-  return (
-     loading ? (
-          <CircularProgress />
-        ) : (
+  return loading ? (
+    <div className="h-screen w-full flex justify-center items-center">
+      <RingLoader color="#7c3aed" />
+    </div>
+  ) : (
     <div className="h-screen w-screen flex flex-col justify-center items-center gap-5">
       <div className="w-full flex justify-center ">
         <ArrowBackIcon
@@ -111,8 +109,7 @@ function ChangeImgPage() {
           </div>
         </>
       ) : (
-        <>
-        </>
+        <></>
       )}
       <div className="flex flex-row">
         <span className="text-black text-xl font-normal prompt-regular mr-4">
@@ -125,7 +122,6 @@ function ChangeImgPage() {
           className="text-black text-xl font-normal underline prompt-regular cursor-pointer"
           onClick={() => {
             const url = prompt("Image URL:");
-            console.log(url);
             setImage(undefined);
             setImageUrl(url!);
             // insertPic(url!);
@@ -141,7 +137,7 @@ function ChangeImgPage() {
       >
         Upload Image
       </button>
-    </div>)
+    </div>
   );
 }
 export default ChangeImgPage;

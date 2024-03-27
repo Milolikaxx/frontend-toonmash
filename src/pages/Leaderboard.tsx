@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { PictureGetResponse } from "../model/pic_get_res";
 import { Service } from "../services/Service";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
+import RingLoader from "react-spinners/RingLoader";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
@@ -37,7 +37,7 @@ function LeaderboardPage() {
     <>
       {loading ? (
         <div className="h-screen w-full flex justify-center items-center">
-          <CircularProgress />
+          <RingLoader color="#7c3aed"/>
         </div>
       ) : (
         <div className="h-max w-full flex justify-center items-center">

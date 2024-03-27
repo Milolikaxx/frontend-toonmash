@@ -74,7 +74,7 @@ function LoginPage() {
                   }
                 }}
                 type="button"
-                className="flex mt-2 whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
+                className="flex mt-2 whitespace-nowrap text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
               >
                 Sign in
               </button>
@@ -86,7 +86,6 @@ function LoginPage() {
               <a
                 className="text-violet-600 text-sm font-normal prompt-regular ml-2 mt-5 cursor-pointer"
                 onClick={() => {
-                  console.log("sign up");
                   navigateToSignUp();
                 }}
               >
@@ -102,7 +101,6 @@ function LoginPage() {
     const user = await userService.login(username, password);
     if (user == null) {
       setMsg("Invalid username or password");
-      console.log("Invalid username or password");
     } else {
       // localStorage.setItem("user", JSON.stringify(user));
       secureLocalStorage.setItem("user", JSON.stringify(user));
