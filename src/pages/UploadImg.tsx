@@ -122,7 +122,6 @@ function UploadImgPage() {
           className="text-black text-xl font-normal underline prompt-regular cursor-pointer"
           onClick={() => {
             const url = prompt("Image URL:");
-            console.log(url);
             setImage(undefined);
             setImageUrl(url!);
             // insertPic(url!);

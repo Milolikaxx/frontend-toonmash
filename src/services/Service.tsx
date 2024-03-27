@@ -7,8 +7,8 @@ import { PictureByDateGetResponse } from "../model/picbydate_get_res";
 import { VoteCountGetResponse } from "../model/votecount_get_res";
 import { RuleGetResponse } from "../model/rule_get_res";
 
-export const HOST = "http://localhost:3001";
-// export const HOST = "https://backend-toonmash-1.onrender.com";
+// export const HOST = "http://localhost:3001";
+export const HOST = "https://backend-toonmash-1.onrender.com";
 
 export class Service {
   //authen
@@ -157,14 +157,14 @@ export class Service {
       return [];
     }
   }
-  async getPicScore7DateAgos(id: number) {
+  async getScoreDateAgos(id: number) {
     const url = HOST + `/vote/totalagos?id=${id}`;
     const response = await axios.get(url);
     if (response.status == 200) {
       const pic: PictureByDateGetResponse = response.data;
       return pic;
     }else{
-      return null;
+      return undefined;
     }
   }
   async addNewPic(uid: number, img: string) {
@@ -221,6 +221,12 @@ export class Service {
     const response = await axios.post(url, body);
     const aff: VotePostResponse = response.data;
     return aff;
+  }
+  async setRule(cooldown: number) {
+    const url = HOST + `/vote/cd/${cooldown}`;
+    const response = await axios.put(url);
+    const res: VotePostResponse = response.data;
+    return res.affected_row;
   }
   async getRule() {
     const url = HOST + "/vote/cd";

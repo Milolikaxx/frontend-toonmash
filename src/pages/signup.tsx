@@ -185,7 +185,6 @@ function SignUpPage() {
                         setErrPwdMsg("Passwords do not match. Please try again")
                       }
                     }else{
-                      console.log(2);
                       setErrMsg("Please complete all required fields to proceed")
                     }
                   }}

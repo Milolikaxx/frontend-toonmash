@@ -1,5 +1,5 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Avatar, CircularProgress, Menu, MenuItem } from "@mui/material";
+import { Avatar, Menu, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -9,6 +9,7 @@ import { UserGetPostResponse } from "../model/response/user_getpost_response";
 import { PictureGetResponse } from "../model/pic_get_res";
 import AddIcon from "@mui/icons-material/Add";
 import secureLocalStorage from "react-secure-storage";
+import RingLoader from "react-spinners/RingLoader";
 function ProfilePage() {
   const { id } = useParams();
 
@@ -43,7 +44,7 @@ function ProfilePage() {
                   setAnchorEl(null);
                 }}
               >
-                ลบ
+                Delete
               </MenuItem>
 
               <MenuItem
@@ -51,14 +52,14 @@ function ProfilePage() {
                   navigate(`/change/` + props.id);
                 }}
               >
-                เปลี่ยนรูป
+                Change picture
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   navigate(`/chart/` + props.id);
                 }}
               >
-                ดูประวัติคะแนน
+                History
               </MenuItem>
             </Menu>
           </>
@@ -76,14 +77,14 @@ function ProfilePage() {
                   setAnchorEl(null);
                 }}
               >
-                ลบ
+                Delete
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   navigate(`/chart/` + props.id);
                 }}
               >
-                ดูประวัติคะแนน
+                History
               </MenuItem>
             </Menu>
           </>
@@ -137,19 +138,19 @@ function ProfilePage() {
     <>
       <div className="w-full h-screen flex justify-center items-center">
         {loading ? (
-          <CircularProgress />
+          <RingLoader color="#7c3aed" />
         ) : (
-          <div className="w-2/4 h-3/4 flex flex-col">
+          <div className="w-2/4 sm:w-3/4 md:w-2/4 h-3/4 flex flex-col">
             {data.current != null ? (
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-row justify-center items-center">
+              <div className="flex flex-col md:flex-row gap-3 justify-between items-center">
+                <div className="flex flex-col md:flex-row gap-3 justify-center items-center">
                   <Avatar
                     sx={{ width: 200, height: 200 }}
                     src={data.current.img}
                   />
-                  <label className="text-4xl ml-5 text-black">
+                  <div className="text-4xl text-black">
                     {data.current.name}
-                  </label>
+                  </div>
                 </div>
                 {own && (
                   <div className="flex flex-row justify-center items-center">
@@ -158,9 +159,9 @@ function ProfilePage() {
                         navigate(`/editprofile/` + data.current?.uid);
                       }}
                       type="button"
-                      className="flex whitespace-nowrap  text-white bg-pink-400 transition rounded-2xl  hover:ring-4 hover:ring-pink-200 text-sm px-5 py-2.5 text-center me-2 mb-2"
+                      className="flex whitespace-nowrap text-white bg-violet-600 transition rounded-2xl  hover:ring-4 hover:ring-violet-200 text-sm px-5 py-2.5 text-center"
                     >
-                      แก้ไข้โปรไฟล์ของฉัน
+                      Edit profile
                     </button>
                   </div>
                 )}
@@ -171,13 +172,13 @@ function ProfilePage() {
               {pics.length > 0 ? (
                 pics.map((p) => (
                   <article
-                    className="shadow-md rounded-b-md"
+                    className="shadow-md rounded-b-md rounded-t-2xl w-fit"
                     key={"p-" + p.pid}
                   >
                     <div className="aspect-square">
                       <div className="w-full overflow-hidden rounded-t-2xl">
                         <img
-                          className="w-[300px] h-[250px] object-cover rounded-t-2xl cursor-pointer transition duration-300 hover:scale-110"
+                          className="w-full sm:w-[300px] h-[250px] object-cover rounded-t-2xl cursor-pointer transition duration-300 hover:scale-110"
                           src={p.img}
                           alt=""
                           onClick={() => {
@@ -203,7 +204,7 @@ function ProfilePage() {
               ) : (
                 <></>
               )}
-              {pics.length < 5 && own && (
+              {pics.length < 5 && own && !isAdmin && (
                 <div
                   onClick={() => navigate("/uploadpic")}
                   className="group h-[250px]  rounded-2xl border-4 border-violet-500 hover:bg-violet-500 transition flex justify-center items-center cursor-pointer "
@@ -221,9 +222,7 @@ function ProfilePage() {
     </>
   );
   async function delPic(id: number) {
-    console.log(id);
-    const res = await service.delByID(id);
-    console.log(res);
+    await service.delByID(id);
     const pic = await service.getPicByUID(data.current!.uid);
     setPics(pic);
   }
