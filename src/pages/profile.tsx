@@ -28,7 +28,7 @@ function ProfilePage() {
     const handleClose = () => {
       setAnchorEl(null);
     };
-
+ 
     return (
       <>
         {own && (
@@ -36,11 +36,18 @@ function ProfilePage() {
             <IconButton onClick={handleClick}>
               <MoreVertIcon />
             </IconButton>
-
+           
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
               <MenuItem
                 onClick={() => {
-                  delPic(props.id);
+                  const text = confirm('Are you sure!');
+                  console.log(text);
+                  if(text == true){
+                    delPic(props.id)
+                  }else {
+                    setAnchorEl(null);
+                  }
+                 
                   setAnchorEl(null);
                 }}
               >
@@ -73,8 +80,13 @@ function ProfilePage() {
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
               <MenuItem
                 onClick={() => {
-                  delPic(props.id);
-                  setAnchorEl(null);
+                   const text = confirm("Are you sure!");
+                   console.log(text);
+                   if (text == true) {
+                     delPic(props.id);
+                   } else {
+                     setAnchorEl(null);
+                   }
                 }}
               >
                 Delete
