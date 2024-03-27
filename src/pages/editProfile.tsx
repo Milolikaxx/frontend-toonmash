@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { Service } from "../services/Service";
 import RingLoader from "react-spinners/RingLoader";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 function EditPage() {
   const service = useMemo(() => {
@@ -24,7 +25,7 @@ function EditPage() {
   const inputCPwd = useRef<HTMLInputElement>(null);
   const userdata = useRef<UserGetPostResponse>();
   const [loading, setLoading] = useState(true);
-
+ const [btnLoading, setBtnLoading] = useState(false);
   function navigateBack() {
     navigate(-1);
   }
@@ -73,9 +74,7 @@ function EditPage() {
         {loading ? (
           <RingLoader color="#7c3aed" />
         ) : (
-          <div
-            className="flex flex-col justify-start mt-14 w-[400px] h-[600px] rounded-2xl md:border shadow-none md:shadow-lg"
-          >
+          <div className="flex flex-col justify-start mt-14 w-[400px] h-[600px] rounded-2xl md:border shadow-none md:shadow-lg">
             <div className="flex flex-row mb-5 mt-10 ml-10 r">
               <ArrowBackIcon
                 className="cursor-pointer"
@@ -83,30 +82,30 @@ function EditPage() {
               />
             </div>
             <div className="flex flex-col justify-center items-center">
-                <Avatar
-                  sx={{ width: 100, height: 100 }}
-                  src={imageUrl}
-                />
-                <label htmlFor="file" className="addPic bg-white rounded-full hover:bg-violet-500 group transition">
-                  {imageUrl ? (
-                    <ChangeCircleIcon
-                      className="group-hover:text-white transition"
-                      sx={{ color: "#9575DE", fontSize: 30 }}
-                    />
-                  ) : (
-                    <AddCircleIcon
-                      className="group-hover:text-white"
-                      sx={{ color: "#9575DE", fontSize: 30 }}
-                    />
-                  )}
-                </label>
-                <input
-                  id="file"
-                  type="file"
-                  accept="image/*"
-                  onChange={onImageChange}
-                  style={{ display: "none" }}
-                />
+              <Avatar sx={{ width: 100, height: 100 }} src={imageUrl} />
+              <label
+                htmlFor="file"
+                className="addPic bg-white rounded-full hover:bg-violet-500 group transition"
+              >
+                {imageUrl ? (
+                  <ChangeCircleIcon
+                    className="group-hover:text-white transition"
+                    sx={{ color: "#9575DE", fontSize: 30 }}
+                  />
+                ) : (
+                  <AddCircleIcon
+                    className="group-hover:text-white"
+                    sx={{ color: "#9575DE", fontSize: 30 }}
+                  />
+                )}
+              </label>
+              <input
+                id="file"
+                type="file"
+                accept="image/*"
+                onChange={onImageChange}
+                style={{ display: "none" }}
+              />
             </div>
             <div className="flex flex-col justify-start">
               <div className="text-black  text-sm font-thin prompt-regular ml-10 mt-5">
@@ -181,23 +180,46 @@ function EditPage() {
                 }}
               />
               <div className="flex flex-row justify-center">
-                <button
-                  onClick={() => {
-                    if (inputUsername.current?.value.trim() && inputName.current?.value.trim()) {
-                      if (inputPwd.current?.value.trim()) {
-                        if (inputPwd.current.value == inputCPwd.current?.value) {
-                          save(inputUsername.current.value.trim(),inputPwd.current.value.trim(),inputName.current.value.trim())
+                {btnLoading ? (
+                  <button
+                    disabled
+                    className="flex mt-2 whitespace-nowrap bg-violet-500 rounded-3xl text-sm pl-4 pr-10 py-2.5 "
+                  >
+                    <PacmanLoader color="#f8fafc" size={10} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setBtnLoading(true);
+                      if (
+                        inputUsername.current?.value.trim() &&
+                        inputName.current?.value.trim()
+                      ) {
+                        if (inputPwd.current?.value.trim()) {
+                          if (
+                            inputPwd.current.value == inputCPwd.current?.value
+                          ) {
+                            save(
+                              inputUsername.current.value.trim(),
+                              inputPwd.current.value.trim(),
+                              inputName.current.value.trim()
+                            );
+                          }
+                        } else {
+                          save(
+                            inputUsername.current.value.trim(),
+                            "",
+                            inputName.current.value.trim()
+                          );
                         }
-                      }else{
-                        save(inputUsername.current.value.trim(),"",inputName.current.value.trim())
                       }
-                    }
-                  }}
-                  type="button"
-                  className="flex mt-5 whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
-                >
-                  save
-                </button>
+                    }}
+                    type="button"
+                    className="flex mt-5 whitespace-nowrap  text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
+                  >
+                    save
+                  </button>
+                )}
               </div>
             </div>
           </div>

@@ -183,8 +183,12 @@ export class Service {
       img: img,
     };
     const response = await axios.put(url, body);
-    const res: VotePostResponse = response.data;
-    return res.affected_row;
+    if (response.status == 200) {
+      return 1
+    }else{
+      return 0
+    }
+    
   }
   async delByID(id: number) {
     const url = HOST + `/pic/${id}`;

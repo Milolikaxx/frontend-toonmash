@@ -1,10 +1,11 @@
-import { Avatar, Button, TextField } from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Service } from "../services/Service";
 import secureLocalStorage from "react-secure-storage";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 function SignUpPage() {
   const service = useMemo(() => {
@@ -15,6 +16,7 @@ function SignUpPage() {
   const inputName = useRef<HTMLInputElement>(null);
   const inputPwd = useRef<HTMLInputElement>(null);
   const inputCPwd = useRef<HTMLInputElement>(null);
+  const [btnLoading, setBtnLoading] = useState(false);
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [errPwdMsg, setErrPwdMsg] = useState("");
@@ -66,7 +68,10 @@ function SignUpPage() {
                   sx={{ width: 100, height: 100 }}
                   src={imageUrl}
                 ></Avatar>
-                <label htmlFor="file" className="addPic bg-white rounded-full hover:bg-violet-500 group transition">
+                <label
+                  htmlFor="file"
+                  className="addPic bg-white rounded-full hover:bg-violet-500 group transition"
+                >
                   {imageUrl ? (
                     <ChangeCircleIcon
                       className="group-hover:text-white transition"
@@ -93,7 +98,7 @@ function SignUpPage() {
               <TextField
                 size="small"
                 inputRef={inputUsername}
-                error={errMsg!=""}
+                error={errMsg != ""}
                 required
                 InputProps={{
                   sx: {
@@ -113,7 +118,7 @@ function SignUpPage() {
               <TextField
                 size="small"
                 inputRef={inputName}
-                error={errMsg!=""}
+                error={errMsg != ""}
                 required
                 InputProps={{
                   sx: {
@@ -132,7 +137,7 @@ function SignUpPage() {
                 size="small"
                 inputRef={inputPwd}
                 type="password"
-                error={errPwdMsg!="" || errMsg!=""}
+                error={errPwdMsg != "" || errMsg != ""}
                 required
                 InputProps={{
                   sx: {
@@ -151,7 +156,7 @@ function SignUpPage() {
                 size="small"
                 inputRef={inputCPwd}
                 type="password"
-                error={errPwdMsg!="" || errMsg!=""}
+                error={errPwdMsg != "" || errMsg != ""}
                 required
                 InputProps={{
                   sx: {
@@ -166,31 +171,53 @@ function SignUpPage() {
                 {errMsg ? errMsg : errPwdMsg}
               </div>
               <div className="flex flex-row justify-center">
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "#9575DE",
-                    borderRadius: 50,
-                    mt: 2,
-                    width: "100px",
-                    alignItems: "center",
-                  }}
-                  onClick={() => {
-                    setErrPwdMsg("")
-                    setErrMsg("")
-                    if (inputUsername.current?.value && inputPwd.current?.value && inputCPwd.current?.value && inputName.current?.value) {
-                      if (inputPwd.current?.value == inputCPwd.current?.value) {
-                        register(inputUsername.current!.value,inputPwd.current!.value,inputName.current!.value);
-                      }else{
-                        setErrPwdMsg("Passwords do not match. Please try again")
+                {btnLoading ? (
+                  <button
+                    disabled
+                    className="flex mt-2 whitespace-nowrap bg-violet-500 rounded-3xl text-sm pl-4 pr-10 py-2.5 "
+                  >
+                    <PacmanLoader color="#f8fafc" size={10} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setBtnLoading(true);
+                      setErrPwdMsg("");
+                      setErrMsg("");
+                      if (
+                        inputUsername.current?.value &&
+                        inputPwd.current?.value &&
+                        inputCPwd.current?.value &&
+                        inputName.current?.value
+                      ) {
+                        if (
+                          inputPwd.current?.value == inputCPwd.current?.value
+                        ) {
+                          register(
+                            inputUsername.current!.value,
+                            inputPwd.current!.value,
+                            inputName.current!.value
+                          );
+                        } else {
+                          setBtnLoading(false);
+                          setErrPwdMsg(
+                            "Passwords do not match. Please try again"
+                          );
+                        }
+                      } else {
+                        setBtnLoading(false);
+                        setErrMsg(
+                          "Please complete all required fields to proceed"
+                        );
                       }
-                    }else{
-                      setErrMsg("Please complete all required fields to proceed")
-                    }
-                  }}
-                >
-                  Sign Up
-                </Button>
+                    }}
+                    type="button"
+                    className="flex mt-2 whitespace-nowrap text-white bg-violet-600 hover:bg-violet-500 transition duration-300 rounded-3xl text-sm px-5 py-2.5 text-center "
+                  >
+                    Sign Up
+                  </button>
+                )}
+                
               </div>
               <div className="flex flex-row justify-center mb-5">
                 <div className="text-black  text-sm font-light  prompt-regular  mt-5">
@@ -212,6 +239,7 @@ function SignUpPage() {
     </>
   );
   async function register(username : string,pwd:string,name:string) {
+
     let url = "https://www.svgrepo.com/download/192244/man-user.svg";
     if (image) {
       url = await service.uploadPic(image);
@@ -221,6 +249,8 @@ function SignUpPage() {
       secureLocalStorage.setItem("user", JSON.stringify(user));
       navigate("/")
       // localStorage.setItem("user", JSON.stringify(user));
+    }else {
+      setBtnLoading(false);
     }
   }
 }

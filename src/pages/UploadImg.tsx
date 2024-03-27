@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import secureLocalStorage from "react-secure-storage";
+import PacmanLoader from "react-spinners/PacmanLoader";
 function UploadImgPage() {
   const service = useMemo(() => {
     return new Service();
@@ -13,6 +14,7 @@ function UploadImgPage() {
   const user = useRef<UserGetPostResponse | undefined>(undefined);
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [btnLoading, setBtnLoading] = useState(false);
 
   useEffect(() => {
     const updateImagePreviews = () => {
@@ -57,6 +59,8 @@ function UploadImgPage() {
     const aff = await service.addNewPic(user.current!.uid, url);
     if (aff == 1) {
       navigate("/profile/" + user.current!.uid);
+    }else{
+      setBtnLoading(false)
     }
   }
   return (
@@ -74,7 +78,7 @@ function UploadImgPage() {
         </h1>
       </div>
 
-      {imageUrl == null ? (
+      {!imageUrl ? (
         <div className="mb-3 group h-[250px]  w-[250px]  rounded-2xl border-4 border-violet-500 hover:bg-violet-500 transition flex justify-center items-center cursor-pointer ">
           <label htmlFor="file">
             <AddIcon
@@ -93,6 +97,7 @@ function UploadImgPage() {
       ) : (
         <>
           <img className="h-64 w-64 object-cover" src={imageUrl} />
+
           <div>
             <button
               type="button"
@@ -130,13 +135,31 @@ function UploadImgPage() {
           URL
         </span>
       </div>
-      <button
-        onClick={() => uploadFile()}
-        type="button"
-        className="text-white bg-violet-600 hover:bg-violet-500 active:bg-violet-700 hover:ring-2 ring-violet-600 transition duration-300 rounded-full px-3 py-2 prompt-regular"
-      >
-        Upload Image
-      </button>
+      {imageUrl ? (
+        <>
+          {btnLoading ? (
+            <button
+              disabled
+              className="flex mt-2 whitespace-nowrap bg-violet-500 rounded-3xl text-sm pl-4 pr-10 py-2.5 "
+            >
+              <PacmanLoader color="#f8fafc" size={10} />
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setBtnLoading(true);
+                uploadFile();
+              }}
+              type="button"
+              className="text-white bg-violet-600 hover:bg-violet-500 active:bg-violet-700 hover:ring-2 ring-violet-600 transition duration-300 rounded-full px-3 py-2 prompt-regular"
+            >
+              Upload Image
+            </button>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
