@@ -11,6 +11,8 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import moment from 'moment';
+import 'moment-timezone';
 import { TabPanel } from "@mui/lab";
 import { ScoreDateAgosGetResponse } from "../model/scoreagos_get_res";
 import { VoteCountGetResponse } from "../model/votecount_get_res";
@@ -53,8 +55,15 @@ function ChartPage() {
         const pOverall = await service.getPicOverall(+id!);
         picOverall.current = pOverall;
 
-        const createDay = new Date(pic.current.created_at);
+        const createDaySt = moment(pic.current.created_at).utc().format('YYYY-MM-DD HH:mm');
+        console.log(createDaySt);
+        
+
+        const createDay = new Date(createDaySt);
         const currentDate = new Date();
+        console.log(createDay.getDate());
+        console.log(currentDate.getDate());
+        
         const daysAgo = new Date();
         daysAgo.setDate(currentDate.getDate() - 6);
         const resScore7Agos = await service.getScoreDateAgos(+id!);
@@ -221,7 +230,7 @@ function ChartPage() {
                 <div className="flex gap-3">
                   <div className="font-bold text-violet-700">Created At</div>
                   <div className="text-gray-600">
-                    {formatDate(new Date(pic.current!.created_at))}
+                    {formatDateShow(new Date(pic.current!.created_at))}
                   </div>
                 </div>
               </div>
@@ -365,8 +374,11 @@ function ChartPage() {
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
-      day: "numeric",
-    });
+      day: "numeric",});
+  }
+  function formatDateShow(date: Date): string {
+    const dateUtc = moment(date).utc()
+    return dateUtc.format('MMMM DD, YYYY')
   }
 }
 export default ChartPage;

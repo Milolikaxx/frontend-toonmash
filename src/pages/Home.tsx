@@ -19,6 +19,7 @@ function HomePage() {
   const pics = useRef<PictureGetResponse[]>([]);
   const user = useRef<UserGetPostResponse | undefined>(undefined);
   const fingerprint = useRef("");
+  const [isVote,setIsVote] = useState(false);
   // const [pics, setPics] = useState<PictureGetResponse[]>([]);
   // const [cooldown,setCooldown] = useState(0);
   const [p1, setP1] = useState<PictureGetResponse>();
@@ -123,10 +124,10 @@ function HomePage() {
                 className="w-full h-60 md:h-96 min-w-[150px] md:min-w-[250px] object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
                 src={p1.img}
                 onClick={() => {
-                  if (!p1score && !p2score) {
-                    if (p1.totalScore && p2.totalScore) {
-                      calScore(p1, p2, 1);
-                    }
+                  if (p1.totalScore && p2.totalScore && !isVote) {
+                    setIsVote(true)
+                    console.log(1);
+                    calScore(p1, p2, 1);
                   }
                 }}
               />
@@ -178,10 +179,10 @@ function HomePage() {
                 className="w-full h-60 md:h-96 min-w-[150px] md:min-w-[250px] object-cover rounded-md cursor-pointer transition hover:ring-4 hover:ring-violet-600"
                 src={p2.img}
                 onClick={() => {
-                  if (!p1score && !p2score) {
-                    if (p1.totalScore && p2.totalScore) {
-                      calScore(p2, p1, 2);
-                    }
+                  if (p1.totalScore && p2.totalScore && !isVote) {
+                    setIsVote(true)
+                    console.log(1);
+                    calScore(p2, p1, 2);
                   }
                 }}
               />
@@ -338,6 +339,7 @@ function HomePage() {
       delay(3000).then(() => {
         setP1score(undefined);
         setP2score(undefined);
+        setIsVote(false)
         loadNextImg();
       });
     }
