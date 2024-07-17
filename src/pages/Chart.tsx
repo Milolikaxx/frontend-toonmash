@@ -56,13 +56,8 @@ function ChartPage() {
         picOverall.current = pOverall;
 
         const createDaySt = moment(pic.current.created_at).utc().format('YYYY-MM-DD HH:mm');
-        console.log(createDaySt);
-        
-
         const createDay = new Date(createDaySt);
         const currentDate = new Date();
-        console.log(createDay.getDate());
-        console.log(currentDate.getDate());
         
         const daysAgo = new Date();
         daysAgo.setDate(currentDate.getDate() - 6);
