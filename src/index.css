@@ -1,28 +1,41 @@
-:root {
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #ffffff;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-}
 .potta-one-regular {
   font-family: "Potta One", system-ui;
-  font-weight: 400;
-  font-style: normal;
 }
 
 .prompt-regular {
   font-family: "Prompt", sans-serif;
-  font-weight: 400;
-  font-style: normal;
 }
+
+.fxcenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rank1{
+  position: absolute;
+  margin-left: -215px;
+  margin-top: 210px;
+  z-index: 100;
+}
+.rank {
+  position: absolute;
+  margin-left: -195px;
+  margin-top: 180px;
+  z-index: 100;
+}
+.addPic {
+  position: absolute;
+  margin-left: 70px;
+  margin-top: 70px;
+  z-index: 100;
+}
+
 a:hover {
   text-decoration: underline;
 }
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
