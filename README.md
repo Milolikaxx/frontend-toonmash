@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# Toonmash Web
   เว็บ --> https://toonmash-pro.web.app/ (คล้าย Facemash ต้นกําเนิดของ Facebook ไม่ใช่ Web Responsive )
 การคํานวณคะแนนใช้ Elo Rating Algorithm ในการคํานวณคะแนน
 
